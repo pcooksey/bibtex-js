@@ -1,0 +1,292 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+  <head> 
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" /> 
+    <meta http-equiv="cache-control" content="no-cache" /> 
+    <title> 
+      Bibtex Fun
+    </title>
+    
+    <script src="bibtex_parser.js" type="text/javascript" charset="utf-8"></script>
+    <script src="bibtex_display.js" type="text/javascript" charset="utf-8"></script>
+    <script src="jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <style>
+    body{ font: 80% "Trebuchet MS", sans-serif; margin: 10px;}
+    .template { display: none; }
+    </style>
+  </head>
+<body>
+  
+<textarea id="bibtex" style="width: 800px; height: 500px">
+  @book{sammet2003programming,
+    title={{Programming languages}},
+    author={Sammet, J.E. and Hemmendinger, D.},
+    year={2003},
+    publisher={John Wiley and Sons Ltd.}
+  }
+
+  @book{bauer1998ubersetzung,
+    title={Übersetzung objektorientierter Programmiersprachen: Konzepte, abstrakte Maschinen und Praktikum \glqq Java Compiler\grqq},
+    author={Bauer, B. and Höllerer, R.},
+    year={1998},
+    publisher={Springer}
+  }
+
+  @article{parr1995antlr,
+    title={{ANTLR: A predicated-LL (k) parser generator}},
+    author={Parr, T.J. and Quong, R.W.},
+    journal={Software-Practice and Experience},
+    volume={25},
+    number={7},
+    pages={789--810},
+    year={1995},
+    publisher={Citeseer}
+  }
+
+  @book{ginsburg1975algebraic,
+    title={{Algebraic and automata-theoretic properties of formal languages}},
+    author={Ginsburg, S.},
+    year={1975},
+    publisher={Elsevier Science Inc. New York, NY, USA}
+  }
+
+  @misc{ wiki:chomskyh,
+    author = "Wikipedia",
+    title = "Chomsky-Hierarchie --- Wikipedia{,} Die freie Enzyklopädie",
+    year = "2010",
+    url = "\url{http://de.wikipedia.org/w/index.php?title=Chomsky-Hierarchie&oldid=71123007}",
+    note = "[Online; Stand 11. März 2010]"
+  }
+
+  @misc{ wiki:ebnf,
+    author = "Wikipedia",
+    title = "Extended Backus-Naur Form --- Wikipedia{,} The Free Encyclopedia",
+    year = "2010",
+    url = "\url{http://en.wikipedia.org/w/index.php?title=Extended_Backus%E2%80%93Naur_Form&oldid=348946400}",
+    note = "[Online; accessed 11-March-2010]"
+  }
+
+
+
+  @article{schning2001theoretische,
+    title={{Theoretische Informatik kurzgefasst, 4}},
+    author={Schning, U.},
+    journal={Auflage. Spektrum-Verlag},
+    year={2001}
+  }
+
+  @book{grune2008parsing,
+    title={{Parsing techniques: a practical guide}},
+    author={Grune, D. and Jacobs, C.J.H.},
+    year={2008},
+    publisher={Springer-Verlag New York Inc}
+  }
+
+  @misc{ wiki:pda,
+    author = "Wikipedia",
+    title = "Pushdown automaton --- Wikipedia{,} The Free Encyclopedia",
+    year = "2010",
+    url = "\url{http://en.wikipedia.org/w/index.php?title=Pushdown_automaton&oldid=343378592}",
+    note = "[Online; accessed 17-March-2010]"
+  }
+
+  @book{ullman,
+    title={{Introduction to automata theory, languages, and computation}},
+    author={Hopcroft, J.E. and Motwani, R. and Ullman, J.D.},
+    year={2006},
+    publisher={Addison-wesley}
+  }
+
+  @misc{linde,
+    author ="Kai Linde",
+    title = "Analyse des Einsatzes moderner Programmierparadigmen in der Roboterstuerung",
+    year = "2007"
+  }
+
+  @misc{expertenhandbuch,
+    author = "KUKA Roboter GmbH",
+    title = "Programmierung Experte KUKA System Software (KSS) R5.4",
+    year = "2005",
+    note = "Stand: 23.02.2005	Version: 00"
+  }
+
+  @article{saraswat1997java,
+    title={{Java is not type-safe}},
+    author={Saraswat, V.},
+    journal={manuscript, AT\&T Research, New York},
+    year={1997},
+    publisher={Citeseer}
+  }
+
+  @book{ANTLR,
+    author = {Terence Parr},
+    edition = {First},
+    interhash = {d9ef4ed82183b86b6a3004161de5ea44},
+    intrahash = {1688029f4c14bd3b234933a48e902c03},
+    publisher = {Pragmatic Bookshelf},
+    series = {Pragmatic Programmers},
+    title = {The Definitive ANTLR Reference: Building Domain-Specific Languages},
+    url = {http://www.amazon.com/Definitive-ANTLR-Reference-Domain-Specific-Programmers/dp/0978739256%3FSubscriptionId%3D13CT5CVB80YFWJEPWS02%26tag%3Dws%26linkCode%3Dxm2%26camp%3D2025%26creative%3D165953%26creativeASIN%3D0978739256},
+    year = 2007,
+    ean = {9780978739256},
+    keywords = {Me:MastersThesis antlr compilers languages lexers parsers programming},
+    asin = {0978739256},
+    description = {Amazon.com: The Definitive ANTLR Reference: Building Domain-Specific Languages (Pragmatic Programmers): Terence Parr: Books},
+    isbn = {0978739256},
+    biburl = {http://www.bibsonomy.org/bibtex/21688029f4c14bd3b234933a48e902c03/gron},
+    dewey = {005.45},
+    month = May
+  }
+
+  @article{parr1996ll,
+    title={{LL and LR translators need k> 1 lookahead}},
+    author={Parr, T.J. and Quong, R.W.},
+    journal={ACM Sigplan Notices},
+    volume={31},
+    number={2},
+    pages={27--34},
+    year={1996},
+    publisher={ACM}
+  }
+
+  @book{dragoonBook,
+    author = {Alfred V. Aho and Monica S. Lam and Ravi Sethi and Jeffrey D. Ullman},
+    howpublished = {Hardcover},
+    interhash = {6bc8d88ce1094de53ec7ec47b7ba4973},
+    intrahash = {c3bc558a481f3cf0445068988a80f1b2},
+    publisher = {{Addison Wesley}},
+    title = {Compilers: Principles, Techniques, and Tools (2nd Edition)},
+    url = {http://www.amazon.ca/exec/obidos/redirect?tag=citeulike09-20\&amp;path=ASIN/0321486811},
+    year = 2006,
+    keywords = {compilers},
+    posted-at = {2009-05-19 16:04:16},
+    description = {CiteULike: Everyone's library},
+    priority = {2},
+    isbn = {0321486811},
+    biburl = {http://www.bibsonomy.org/bibtex/2c3bc558a481f3cf0445068988a80f1b2/earthfare},
+    citeulike-article-id = {1033375},
+    month = {August}
+  }
+
+
+  @article{Knuth:1965:LR,
+      author = {Knuth, Donald},
+      citeulike-article-id = {5914311},
+      journal = {Information and Control},
+      keywords = {parsing},
+      pages = {607--639},
+      posted-at = {2009-10-09 06:17:47},
+      priority = {2},
+      title = {On the Translation of Languages from Left to Right},
+      volume = {8},
+      year = {1965}
+  }
+
+
+  @MISC{antlr:targets,
+        AUTHOR = "Terance Parr et al",
+        TITLE = "ANTLR code generation targets",
+        MONTH = "May",
+        YEAR = {2010},
+        NOTE = "\url{http://www.antlr.org/wiki/display/ANTLR3/Code+Generation+Targets?focusedCommentId=23232603#comment-23232603}"
+  }
+
+  @MISC{antlr:works,
+        AUTHOR = "Jean Bovet and Terance Parr",
+        TITLE = "ANTLRWorks: An ANTLR Grammar Development Environment",
+        MONTH = "July",
+        YEAR = {2007},
+        NOTE = "\url{http://www.antlr.org/papers/antlrworks-draft.pdf}"
+  }
+
+  @MISC{antlr:keywords,
+        AUTHOR = "Terance Parr",
+        TITLE = "How can I allow keywords as identifiers?",
+        MONTH = "June",
+        YEAR = {2008},
+        NOTE = "\url{http://www.antlr.org/wiki/pages/viewpage.action?pageId=1741}"
+  }
+
+  @misc{ wiki:ast,
+    author = "Wikipedia",
+    title = "Abstract syntax tree --- Wikipedia{,} The Free Encyclopedia",
+    year = "2010",
+    url = "\url{http://en.wikipedia.org/w/index.php?title=Abstract_syntax_tree&oldid=351440895}",
+    note = "[Online; accessed 30-March-2010]"
+  }
+
+  @misc{lrpdf,
+    author = "Andreas Kunert",
+    title = "LR Parser für Pragmatiker",
+    year = "2008",
+    url = "\url{http://www2.informatik.hu-berlin.de/~kunert/papers/lr-analyse/}"
+  }
+
+  @book{LangImplPatterns,
+      abstract = {Learn to build configuration file readers, data readers, model-driven code generators, source-to-source translators, source analyzers, and interpreters. You don't need a background in computer science-ANTLR creator Terence Parr demystifies language implementation by breaking it down into the most common design patterns. Pattern by pattern, you'll learn the key skills you need to implement your own computer languages.},
+      author = {Parr, Terence},
+      keywords = {language\_implementation},
+      priority = {0},
+      publisher = {The Pragmatic Bookshelf},
+      title = {Language Implementation Patterns: Create Your Own Domain-Specific and General Programming Languages},
+      year = {2009}
+  }
+
+  @article{lua,
+    author =     "R. Ierusalimschy and L.H. de Figueiredo and W. Celes",
+    title =      "The Implementation of Lua 5.0",
+    abstract =   "We discuss the main novelties of the   implementation of Lua 5.0: its register-based virtual machine, the   new algorithm for optimizing tables used as arrays, the   implementation of closures, and the addition of   coroutines.",
+    journal =    "Journal of Universal Computer Science",
+    year =       "2005",
+    volume =     "11",
+    number =     "7",
+    pages =      "1159--1176"
+    }
+
+
+
+  @misc{treebased-interpreter,
+  AUTHOR = "Terance Parr",
+  TITLE = "Tree based interpreters",
+  MONTH = "May",
+  YEAR = {2009},
+  NOTE = "\url{http://www.antlr.org/wiki/display/ANTLR3/The+difference+between+compilers+and+interpreters}"
+  }
+</textarea>
+
+<hr />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div id="bibtex_display">
+  <div class="template">
+    <strong>
+    <span class="year">%, </span>
+    <span class="author">%: </span>
+    </strong><br />
+    <span class="title" style="margin-left:15px;"></span>
+    <br />
+    <br />
+  </div>
+</div>
+
+
+ 
+<script>
+displayBibtex($("#bibtex").val());
+</script>
+
+</body></html>
