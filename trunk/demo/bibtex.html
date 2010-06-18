@@ -14,6 +14,7 @@
     <style>
     body{ font: 80% "Trebuchet MS", sans-serif; margin: 10px;}
     textarea { font-size: 8pt; width: 500px; height: 150px; }
+    #bibtex_errors { margin-top:10px; color: red;}
     h1 { font-size: 12pt; margin-top:20px; }
     </style>
   </head>
@@ -256,6 +257,7 @@
   NOTE = "\url{http://www.antlr.org/wiki/display/ANTLR3/The+difference+between+compilers+and+interpreters}"
   }
 </textarea>
+<div id="bibtex_errors"></div>
 
 <h1> Template </h1>
 <textarea id="bibtex_template_input">
@@ -273,13 +275,7 @@
 </div>
 </textarea>
 
-
-
-
-
-<div class="bibtex_template">
-</div>
-
+<div class="bibtex_template"></div>
 
 <h1> Rendered </h1>
 
@@ -290,7 +286,12 @@
   refresh = false;
   window.setInterval(function() {
     if (refresh) {
-      bibtex_js_draw();
+      try {
+        $("#bibtex_errors").html("");
+        bibtex_js_draw();
+      } catch (err) {
+        $("#bibtex_errors").html(err.substring(0, 100) + "...");
+      }
       refresh = false;
     }
   }, 500);
@@ -303,6 +304,9 @@
   $(".bibtex_template").html($("#bibtex_template_input").val());
   
   // monitor bibtex for changes and redraw
+  $("#bibtex_input").keyup(function() {
+    refresh = true;
+  });
 </script>
 
 </body>
