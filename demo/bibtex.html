@@ -13,14 +13,8 @@
     
     <style>
     body{ font: 80% "Trebuchet MS", sans-serif; margin: 10px;}
-    textarea {
-      font-size: 8pt;
-      width: 500px; 
-      height: 300px;
-    }
-    #bibtex_input { height: 180px; }
-    #bibtex_template_input { height: 80px;}
-    h1 { font-size: 10pt; }
+    textarea { font-size: 8pt; width: 500px; height: 150px; }
+    h1 { font-size: 12pt; margin-top:20px; }
     </style>
   </head>
 <body>
@@ -265,21 +259,23 @@
 
 <h1> Template </h1>
 <textarea id="bibtex_template_input">
-<strong>
-<span class="year">%, </span>
-<span class="author">%: </span>
-</strong><br />
-<div style="margin-left:15px;">
-  <div class="title"></div>
-  <div>
-    <a class="url">
-      <span class="url"></span>
-    </a>
-  </div>
+<div class="if author" style="font-weight: bold;">
+  <span class="if year">
+    <span class="year"></span>, 
+  </span>
+  <span class="author"></span>
+  <span class="if url" style="margin-left: 20px">
+    <a class="url" style="color:black; font-size:10px">(view online)</a>
+  </span>
 </div>
-<br />
-<br />
+<div style="margin-left: 10px; margin-bottom:5px;">
+  <span class="title"></span>
+</div>
 </textarea>
+
+
+
+
 
 <div class="bibtex_template">
 </div>
