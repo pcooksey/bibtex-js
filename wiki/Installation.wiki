@@ -1,8 +1,6 @@
 #summary How to get BibTeX-js up and running.
 #labels Featured
 
-= How to install BibTeX-js =
-
 Load javascript, add this to your html code:
 
 {{{
