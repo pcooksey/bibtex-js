@@ -8,17 +8,25 @@
       Bibtex Fun
     </title>
     
-    <script src="bibtex_parser.js" type="text/javascript" charset="utf-8"></script>
-    <script src="bibtex_display.js" type="text/javascript" charset="utf-8"></script>
-    <script src="jquery-1.4.2.min.js" type="text/javascript" charset="utf-8"></script>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script src="../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    
     <style>
     body{ font: 80% "Trebuchet MS", sans-serif; margin: 10px;}
-    .template { display: none; }
+    textarea {
+      font-size: 8pt;
+      width: 500px; 
+      height: 300px;
+    }
+    #bibtex_input { height: 180px; }
+    #bibtex_template_input { height: 80px;}
+    h1 { font-size: 10pt; }
     </style>
   </head>
 <body>
   
-<textarea id="bibtex" style="width: 800px; height: 500px">
+<h1> BibTeX Input </h1>
+<textarea id="bibtex_input">
   @book{sammet2003programming,
     title={{Programming languages}},
     author={Sammet, J.E. and Hemmendinger, D.},
@@ -255,38 +263,51 @@
   }
 </textarea>
 
-<hr />
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div id="bibtex_display">
-  <div class="template">
-    <strong>
-    <span class="year">%, </span>
-    <span class="author">%: </span>
-    </strong><br />
-    <span class="title" style="margin-left:15px;"></span>
-    <br />
-    <br />
+<h1> Template </h1>
+<textarea id="bibtex_template_input">
+<strong>
+<span class="year">%, </span>
+<span class="author">%: </span>
+</strong><br />
+<div style="margin-left:15px;">
+  <div class="title"></div>
+  <div>
+    <a class="url">
+      <span class="url"></span>
+    </a>
   </div>
+</div>
+<br />
+<br />
+</textarea>
+
+<div class="bibtex_template">
 </div>
 
 
- 
-<script>
-displayBibtex($("#bibtex").val());
+<h1> Rendered </h1>
+
+<div id="bibtex_display">
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  refresh = false;
+  window.setInterval(function() {
+    if (refresh) {
+      bibtex_js_draw();
+      refresh = false;
+    }
+  }, 500);
+
+  // monitor template for changes and add template to dom
+  $("#bibtex_template_input").keyup(function() {
+    $(".bibtex_template").html($("#bibtex_template_input").val());
+    refresh = true;
+  });
+  $(".bibtex_template").html($("#bibtex_template_input").val());
+  
+  // monitor bibtex for changes and redraw
 </script>
 
-</body></html>
+</body>
+</html>

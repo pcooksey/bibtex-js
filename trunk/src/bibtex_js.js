@@ -14,7 +14,6 @@
 //  value -> value_quotes | value_braces | key;
 //  value_quotes -> '"' .*? '"'; // not quite
 //  value_braces -> '{' .*? '"'; // not quite
-
 function BibtexParser() {
   this.pos = 0;
   this.input = "";
@@ -232,4 +231,80 @@ function BibtexParser() {
       this.match("}");
     }
   }
+}
+
+function BibtexDisplay() {
+  this.fixValue = function (value) {
+    value = value.replace(/\\glqq\s?/, "&bdquo;");
+    value = value.replace(/\\grqq\s?/, '&rdquo;');
+    value = value.replace(/\\ /, '&nbsp;');
+    value = value.replace(/\\url/, '');
+    value = value.replace(/---/, '&mdash;');
+    value = value.replace(/\{(.*?)\}/, '$1');
+    return value;
+  }
+
+  this.displayBibtex = function(i, o) {
+    var b = new BibtexParser();
+    b.setInput(i);
+    b.bibtex();
+
+    var e = b.getEntries();
+    var old = o.find("*");
+  
+    for (var item in e) {
+      var tpl = $(".bibtex_template").clone().removeClass('bibtex_template');
+      tpl.addClass("unused");
+      
+      for (var key in e[item]) {
+      
+        var fields = tpl.find("." + key.toLowerCase());
+        for (var i = 0; i < fields.size(); i++) {
+          var f = $(fields[i]);
+          f.removeClass("unused");
+          var value = this.fixValue(e[item][key]);
+          if (f.is("a")) {
+            f.attr("href", value);
+          } else {
+            var currentHTML = f.html() || "";
+            if (currentHTML.match("%")) {
+              // "complex" template field
+              f.html(currentHTML.replace("%", value));
+            } else {
+              // simple field
+              f.html(value);
+            }
+          }
+        }
+      }
+    
+      var emptyFields = tpl.find("span .unused");
+      emptyFields.each(function (key,f) {
+        if (f.innerHTML.match("%")) {
+          f.innerHTML = "";
+        }
+      });
+    
+      o.append(tpl);
+      tpl.show();
+    }
+    
+    old.remove();
+  }
+}
+
+function bibtex_js_draw() {
+  $(".bibtex_template").hide();
+  (new BibtexDisplay()).displayBibtex($("#bibtex_input").val(), $("#bibtex_display"));
+}
+
+// check whether or not jquery is present
+if (typeof jQuery == 'undefined') {  
+  // an interesting idea is loading jquery here. this might be added
+  // in the future.
+  alert("Please include jquery in all pages using bibtex_js!");
+} else {
+  $(document).ready(function () {
+    bibtex_js_draw();
+  });
 }
