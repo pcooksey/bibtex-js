@@ -156,7 +156,7 @@ function BibtexParser() {
       if (this.input[this.pos].match("[a-zA-Z0-9_:\\.-]")) {
         this.pos++
       } else {
-        return this.input.substring(start, this.pos);
+        return this.input.substring(start, this.pos).toUpperCase();
       }
     }
   }
@@ -243,8 +243,8 @@ function BibtexDisplay() {
     value = value.replace(/\{(.*?)\}/, '$1');
     return value;
   }
-
-  this.displayBibtex = function(i, o) {
+  
+  this.displayBibtex2 = function(i, o) {
     var b = new BibtexParser();
     b.setInput(i);
     b.bibtex();
@@ -291,6 +291,74 @@ function BibtexDisplay() {
     
     old.remove();
   }
+
+
+  this.displayBibtex = function(input, output) {
+    // parse bibtex input
+    var b = new BibtexParser();
+    b.setInput(input);
+    b.bibtex();
+    
+    // save old entries to remove them later
+    var old = output.find("*");    
+
+    // iterate over bibTeX entries
+    var entries = b.getEntries();
+    for (var entryKey in entries) {
+      var entry = entries[entryKey];
+      
+      // find template
+      var tpl = $(".bibtex_template").clone().removeClass('bibtex_template');
+      
+      // find all keys in the entry
+      var keys = [];
+      for (var key in entry) {
+        keys.push(key.toUpperCase());
+      }
+      
+      // find all ifs and check them
+      var removed = false;
+      do {
+        // find next if
+        var conds = tpl.find(".if");
+        if (conds.size() == 0) {
+          break;
+        }
+        
+        // check if
+        var cond = conds.first();
+        cond.removeClass("if");
+        var ifTrue = true;
+        var classList = cond.attr('class').split(' ');
+        $.each( classList, function(index, cls){
+          if(keys.indexOf(cls.toUpperCase()) < 0) {
+            ifTrue = false;
+          }
+          cond.removeClass(cls);
+        });
+        
+        // remove false ifs
+        if (!ifTrue) {
+          cond.remove();
+        }
+      } while (true);
+      
+      // fill in remaining fields 
+      for (var index in keys) {
+        var key = keys[index];
+        var value = entry[key] || "";
+        tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
+        tpl.find("a." + key.toLowerCase()).attr('href', this.fixValue(value));
+      }
+      
+      output.append(tpl);
+      tpl.show();
+    }
+    
+    // remove old entries
+    old.remove();
+  }
+
 }
 
 function bibtex_js_draw() {
