@@ -372,13 +372,13 @@ if (typeof jQuery == 'undefined') {
   // in the future.
   alert("Please include jquery in all pages using bibtex_js!");
 } else {
-  // check for template, add default
-  if ($("#bibtex_template").size() == 0) {
-    $("body").append("<div id=\"bibtex_template\"><div class=\"if author\" style=\"font-weight: bold;\">\n  <span class=\"if year\">\n    <span class=\"year\"></span>, \n  </span>\n  <span class=\"author\"></span>\n  <span class=\"if url\" style=\"margin-left: 20px\">\n    <a class=\"url\" style=\"color:black; font-size:10px\">(view online)</a>\n  </span>\n</div>\n<div style=\"margin-left: 10px; margin-bottom:5px;\">\n  <span class=\"title\"></span>\n</div></div>");
-  }
-  
   // draw bibtex when loaded
   $(document).ready(function () {
+    // check for template, add default
+    if ($(".bibtex_template").size() == 0) {
+      $("body").append("<div class=\"bibtex_template\"><div class=\"if author\" style=\"font-weight: bold;\">\n  <span class=\"if year\">\n    <span class=\"year\"></span>, \n  </span>\n  <span class=\"author\"></span>\n  <span class=\"if url\" style=\"margin-left: 20px\">\n    <a class=\"url\" style=\"color:black; font-size:10px\">(view online)</a>\n  </span>\n</div>\n<div style=\"margin-left: 10px; margin-bottom:5px;\">\n  <span class=\"title\"></span>\n</div></div>");
+    }
+
     bibtex_js_draw();
   });
 }
