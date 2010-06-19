@@ -240,12 +240,13 @@ function BibtexDisplay() {
     value = value.replace(/\\ /, '&nbsp;');
     value = value.replace(/\\url/, '');
     value = value.replace(/---/, '&mdash;');
-    value = value.replace('{\\"a}', 'ä');
-    value = value.replace('{\\"o}', 'ö');
-    value = value.replace('{\\"u}', 'ü');
-    value = value.replace('{\\"A}', 'Ä');
-    value = value.replace('{\\"O}', 'Ö');
-    value = value.replace('{\\"U}', 'Ü');
+    value = value.replace('{\\"a}', '&auml;');
+    value = value.replace('{\\"o}', '&ouml;');
+    value = value.replace('{\\"u}', '&uuml;');
+    value = value.replace('{\\"A}', '&Auml;');
+    value = value.replace('{\\"O}', '&Ouml;');
+    value = value.replace('{\\"U}', '&Uuml;');
+    value = value.replace('\\ss', '&szlig;');
     value = value.replace(/\{(.*?)\}/, '$1');
     return value;
   }
