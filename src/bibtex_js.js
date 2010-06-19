@@ -235,19 +235,19 @@ function BibtexParser() {
 
 function BibtexDisplay() {
   this.fixValue = function (value) {
-    value = value.replace(/\\glqq\s?/, "&bdquo;");
-    value = value.replace(/\\grqq\s?/, '&rdquo;');
-    value = value.replace(/\\ /, '&nbsp;');
-    value = value.replace(/\\url/, '');
-    value = value.replace(/---/, '&mdash;');
-    value = value.replace('{\\"a}', '&auml;');
-    value = value.replace('{\\"o}', '&ouml;');
-    value = value.replace('{\\"u}', '&uuml;');
-    value = value.replace('{\\"A}', '&Auml;');
-    value = value.replace('{\\"O}', '&Ouml;');
-    value = value.replace('{\\"U}', '&Uuml;');
-    value = value.replace('\\ss', '&szlig;');
-    value = value.replace(/\{(.*?)\}/, '$1');
+    value = value.replace(/\\glqq\s?/g, "&bdquo;");
+    value = value.replace(/\\grqq\s?/g, '&rdquo;');
+    value = value.replace(/\\ /g, '&nbsp;');
+    value = value.replace(/\\url/g, '');
+    value = value.replace(/---/g, '&mdash;');
+    value = value.replace(/{\\"a}/g, '&auml;');
+    value = value.replace(/\{\\"o\}/g, '&ouml;');
+    value = value.replace(/{\\"u}/g, '&uuml;');
+    value = value.replace(/{\\"A}/g, '&Auml;');
+    value = value.replace(/{\\"O}/g, '&Ouml;');
+    value = value.replace(/{\\"U}/g, '&Uuml;');
+    value = value.replace(/\\ss/g, '&szlig;');
+    value = value.replace(/\{(.*?)\}/g, '$1');
     return value;
   }
   
