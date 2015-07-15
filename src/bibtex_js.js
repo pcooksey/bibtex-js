@@ -19,6 +19,7 @@ function BibtexParser() {
   this.input = "";
   
   this.entries = {};
+  this.bibtexraw = {};
   this.strings = {
       JAN: "January",
       FEB: "February",
@@ -42,7 +43,11 @@ function BibtexParser() {
   }
   
   this.getEntries = function() {
-      return this.entries;
+    return this.entries;
+  }
+  
+  this.getBibTexRaw = function() {
+  	return this.bibtexraw;
   }
 
   this.isWhitespace = function(s) {
@@ -216,6 +221,7 @@ function BibtexParser() {
   }
 
   this.bibtex = function() {
+    this.bibtexraw = this.input.split('@');
     while(this.tryMatch("@")) {
       var d = this.directive().toUpperCase();
       this.match("{");
@@ -235,7 +241,7 @@ function BibtexParser() {
 
 function BibtexDisplay() {
   this.fixValue = function (value) {
-    value = value.replace(/\\glqq\s?/g, "&bdquo;");
+    value = value.replace(/\\glqq\s?/g, "&ldquo;");
     value = value.replace(/\\grqq\s?/g, '&rdquo;');
     value = value.replace(/\\ /g, '&nbsp;');
     value = value.replace(/\\url/g, '');
@@ -250,55 +256,6 @@ function BibtexDisplay() {
     value = value.replace(/\{(.*?)\}/g, '$1');
     return value;
   }
-  
-  this.displayBibtex2 = function(i, o) {
-    var b = new BibtexParser();
-    b.setInput(i);
-    b.bibtex();
-
-    var e = b.getEntries();
-    var old = o.find("*");
-  
-    for (var item in e) {
-      var tpl = $(".bibtex_template").clone().removeClass('bibtex_template');
-      tpl.addClass("unused");
-      
-      for (var key in e[item]) {
-      
-        var fields = tpl.find("." + key.toLowerCase());
-        for (var i = 0; i < fields.size(); i++) {
-          var f = $(fields[i]);
-          f.removeClass("unused");
-          var value = this.fixValue(e[item][key]);
-          if (f.is("a")) {
-            f.attr("href", value);
-          } else {
-            var currentHTML = f.html() || "";
-            if (currentHTML.match("%")) {
-              // "complex" template field
-              f.html(currentHTML.replace("%", value));
-            } else {
-              // simple field
-              f.html(value);
-            }
-          }
-        }
-      }
-    
-      var emptyFields = tpl.find("span .unused");
-      emptyFields.each(function (key,f) {
-        if (f.innerHTML.match("%")) {
-          f.innerHTML = "";
-        }
-      });
-    
-      o.append(tpl);
-      tpl.show();
-    }
-    
-    old.remove();
-  }
-
 
   this.displayBibtex = function(input, output) {
     // parse bibtex input
@@ -370,22 +327,63 @@ function BibtexDisplay() {
 
 function bibtex_js_draw() {
   $(".bibtex_template").hide();
-  (new BibtexDisplay()).displayBibtex($("#bibtex_input").val(), $("#bibtex_display"));
+  if($("#bibtex_input").length){
+    (new BibtexDisplay()).displayBibtex($("#bibtex_input").val(), $("#bibtex_display"));
+  } else {
+    var bibstring = "";
+    $('bibtex').each(function(index, value) {
+       $.get($(this).attr('src'), function(data) {
+        bibstring += data;
+      });
+    });
+    $(document).ajaxStop(function() {
+	  // executed on completion of last outstanding ajax call
+	  (new BibtexDisplay()).displayBibtex(bibstring, $("#bibtex_display"));
+	});
+  }
 }
 
 // check whether or not jquery is present
-if (typeof jQuery == 'undefined') {  
-  // an interesting idea is loading jquery here. this might be added
-  // in the future.
-  alert("Please include jquery in all pages using bibtex_js!");
+if (!window.jQuery) {
+  //Add jquery to the webpage
+  var jq = document.createElement('script'); jq.type = 'text/javascript';
+  jq.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js';
+  document.getElementsByTagName('head')[0].appendChild(jq);
+  // Poll for jQuery to come into existance
+  var checkReady = function(callback) {
+      if (window.jQuery) {
+          callback(jQuery);
+      }
+      else {
+          window.setTimeout(function() { checkReady(callback); }, 100);
+      }
+  };
+  var defaultTemplate = "<div class=\"bibtex_template\"><div class=\"if author\" style=\"font-weight: bold;\">\n"+
+                        "<span class=\"if year\">\n"+
+                        "<span class=\"year\"></span>,\n"+
+                        "</span>\n  <span class=\"author\"></span>\n"+
+                        "<span class=\"if url\" style=\"margin-left: 20px\">\n"+
+                        "<a class=\"url\" style=\"color:black; font-size:10px\">(view online)</a>\n"+
+                        "</span>\n</div>\n<div style=\"margin-left: 10px; margin-bottom:5px;\">\n"+
+                        "<span class=\"title\"></span>\n</div></div>";
+  // Start polling...
+  checkReady(function($) {
+    // draw bibtex when loaded
+    $(document).ready(function () {
+      // check for template, add default
+      if ($(".bibtex_template").size() == 0) {
+        $("body").append(defaultTemplate);
+      }
+      bibtex_js_draw();
+    });
+  });
 } else {
   // draw bibtex when loaded
   $(document).ready(function () {
     // check for template, add default
     if ($(".bibtex_template").size() == 0) {
-      $("body").append("<div class=\"bibtex_template\"><div class=\"if author\" style=\"font-weight: bold;\">\n  <span class=\"if year\">\n    <span class=\"year\"></span>, \n  </span>\n  <span class=\"author\"></span>\n  <span class=\"if url\" style=\"margin-left: 20px\">\n    <a class=\"url\" style=\"color:black; font-size:10px\">(view online)</a>\n  </span>\n</div>\n<div style=\"margin-left: 10px; margin-bottom:5px;\">\n  <span class=\"title\"></span>\n</div></div>");
+      $("body").append(defaultTemplate);
     }
-
     bibtex_js_draw();
   });
 }

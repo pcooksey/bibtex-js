@@ -1,0 +1,64 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+  <head> 
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" /> 
+    <meta http-equiv="cache-control" content="no-cache" /> 
+    <title> 
+      Bibtex-js Demo
+    </title>
+    
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
+    <script src="../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    <bibtex src="test.bib"></bibtex>
+    
+    <style>
+    body{ font: 80% "Trebuchet MS", sans-serif; margin: 10px;}
+    textarea { font-size: 8pt; width: 500px; height: 150px; }
+    #bibtex_errors { margin-top:10px; color: red;}
+    h1 { font-size: 12pt; margin-top:20px; }
+    </style>
+  </head>
+<body>
+  
+<div id="bibtex_errors"></div>
+<h1> Rendered </h1>
+
+<div id="bibtex_display">
+  <div class="bibtex_template">
+  <ul> <li>
+    <span class="if title">
+      <a class="url">
+          <span class="title"></span>,
+      </a>
+    </span>
+    <div class="if author">
+      <span class="author"></span>
+    </div>
+    <div>
+      <span class="if journal"><em><span class="journal"></span></em></span>
+      <span class="if month"><span class="month"></span>,</span> 
+      <span class="if year"><span class="year"></span></span>.
+    </div>
+  </li></ul>
+  </div>
+</div>
+<div class="demotext"></div>
+
+<script type="text/javascript" charset="utf-8">
+  refresh = false;
+  window.setInterval(function() {
+    if (refresh) {
+      try {
+        $("#bibtex_errors").html("");
+        bibtex_js_draw();
+      } catch (err) {
+        $("#bibtex_errors").html(err.substring(0, 100) + "...");
+      }
+      refresh = false;
+    }
+  }, 500);
+</script>
+
+</body>
+</html>
