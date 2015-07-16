@@ -22,28 +22,36 @@
 <body>
   
 <div id="bibtex_errors"></div>
-<h1> Rendered </h1>
+<h1> Rendered Publications</h1>
 
-<div id="bibtex_display">
-  <div class="bibtex_template">
-  <ul> <li>
-    <span class="if title">
-      <a class="url">
-          <span class="title"></span>,
-      </a>
-    </span>
-    <div class="if author">
-      <span class="author"></span>
-    </div>
-    <div>
-      <span class="if journal"><em><span class="journal"></span></em></span>
-      <span class="if month"><span class="month"></span>,</span> 
-      <span class="if year"><span class="year"></span></span>.
-    </div>
-  </li></ul>
+<div class="bibtex_structure">
+  <div class="group year" extra="ASC">
+    <h1 class="year"></h1>
+    <div class="templates"></div>
   </div>
 </div>
-<div class="demotext"></div>
+
+<div id="bibtex_display">
+  
+  <div class="bibtex_template">
+    <ul> <li>
+      <span class="if title">
+        <a class="url">
+            <span class="title"></span>,
+        </a>
+      </span>
+      <div class="if author">
+        <span class="author"></span>
+      </div>
+      <div>
+        <span class="if journal"><em><span class="journal"></span></em></span>
+        <span class="if month"><span class="month"></span>,</span> 
+        <span class="if year"><span class="year"></span></span>.
+      </div>
+    </li></ul>
+  </div>
+  
+</div>
 
 <script type="text/javascript" charset="utf-8">
   refresh = false;

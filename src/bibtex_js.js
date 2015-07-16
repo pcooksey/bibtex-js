@@ -1,25 +1,30 @@
-// Issues:
-//  no comment handling within strings
-//  no string concatenation
-//  no variable values yet
+/* 
+* Author = Philip Cooksey
+* Credit = Henrik Mühe
+* Issues:
+*  no comment handling within strings
+*  no string concatenation
+*  no variable values yet
 
-// Grammar implemented here:
-//  bibtex -> (string | preamble | comment | entry)*;
-//  string -> '@STRING' '{' key_equals_value '}';
-//  preamble -> '@PREAMBLE' '{' value '}';
-//  comment -> '@COMMENT' '{' value '}';
-//  entry -> '@' key '{' key ',' key_value_list '}';
-//  key_value_list -> key_equals_value (',' key_equals_value)*;
-//  key_equals_value -> key '=' value;
-//  value -> value_quotes | value_braces | key;
-//  value_quotes -> '"' .*? '"'; // not quite
-//  value_braces -> '{' .*? '"'; // not quite
+* Grammar implemented here:
+*  bibtex -> (string | preamble | comment | entry)*;
+*  string -> '@STRING' '{' key_equals_value '}';
+*  preamble -> '@PREAMBLE' '{' value '}';
+*  comment -> '@COMMENT' '{' value '}';
+*  entry -> '@' key '{' key ',' key_value_list '}';
+*  key_value_list -> key_equals_value (',' key_equals_value)*;
+*  key_equals_value -> key '=' value;
+*  value -> value_quotes | value_braces | key;
+*  value_quotes -> '"' .*? '"'; // not quite
+*  value_braces -> '{' .*? '"'; // not quite
+*
+*/
+
 function BibtexParser() {
   this.pos = 0;
   this.input = "";
   
   this.entries = {};
-  this.bibtexraw = {};
   this.strings = {
       JAN: "January",
       FEB: "February",
@@ -221,7 +226,8 @@ function BibtexParser() {
   }
 
   this.bibtex = function() {
-    this.bibtexraw = this.input.split('@');
+    var i = 0;
+    bibtexraw = this.input.split('@');
     while(this.tryMatch("@")) {
       var d = this.directive().toUpperCase();
       this.match("{");
@@ -236,6 +242,7 @@ function BibtexParser() {
       }
       this.match("}");
     }
+    this.entries[this.currentEntry]["bibtexraw"] = bibtexraw[i++];
   }
 }
 
@@ -256,69 +263,143 @@ function BibtexDisplay() {
     value = value.replace(/\{(.*?)\}/g, '$1');
     return value;
   }
+  
+  this.createTemplate = function(entry){
+    // find template
+    var tpl = $(".bibtex_template").clone().removeClass('bibtex_template');
+    
+    // find all keys in the entry
+    var keys = [];
+    for (var key in entry) {
+      keys.push(key.toUpperCase());
+    }
+    
+    // find all ifs and check them
+    var removed = false;
+    do {
+      // find next if
+      var conds = tpl.find(".if");
+      if (conds.size() == 0) {
+        break;
+      }
+      
+      // check if
+      var cond = conds.first();
+      cond.removeClass("if");
+      var ifTrue = true;
+      var classList = cond.attr('class').split(' ');
+      $.each( classList, function(index, cls){
+        if(keys.indexOf(cls.toUpperCase()) < 0) {
+          ifTrue = false;
+        }
+        cond.removeClass(cls);
+      });
+      
+      // remove false ifs
+      if (!ifTrue) {
+        cond.remove();
+      }
+    } while (true);
+    
+    // fill in remaining fields 
+    for (var index in keys) {
+      var key = keys[index];
+      var value = entry[key] || "";
+      tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
+      tpl.find("a." + key.toLowerCase()).attr('href', this.fixValue(value));
+    }
+    return tpl;
+  }
+  
+  this.createArray = function(entries) {
+    var entriesArray = [];
+    for(var entryKey in entries) {
+      entriesArray.push(entries[entryKey]);
+    }
+    return entriesArray;
+  }
+  
+  this.sortArray = function(array, key, rule) {
+    array = array.sort(function(a,b) { 
+      switch(rule.toUpperCase()) {
+        case "DESC":
+          return parseInt(a[key.toUpperCase()]) - parseInt(b[key.toUpperCase()]); break;
+        case "ASC":
+          return parseInt(b[key.toUpperCase()]) - parseInt(a[key.toUpperCase()]); break;
+        default: 
+          return 0; break;
+      }
+    });
+    return array;
+  }
+  
+  this.createStructure = function(structure, output, entries) {
+    // Create array for sorting
+    var entriesArray = this.createArray(entries);
+  
+    var struct = structure.clone().removeClass('bibtex_structure');
+    var groups = struct.children(".group");
+    
+    if (groups.size() == 1) {
+      var group = groups.first();
+      group.removeClass("group");
+      var groupName = group.attr('class').toUpperCase();
+      group.removeClass(groupName.toLowerCase());
+      var rule = group.attr('extra');
+      var sortedArray = this.sortArray(entriesArray, groupName, rule);
+      
+      //Starting to create the page
+      var newStruct = struct.clone();
+      var groupNameValue = sortedArray[0][groupName];
+      newStruct.find("."+groupName.toLowerCase()).html(groupNameValue);
+      // iterate over bibTeX entries
+      for (var entryKey in sortedArray) {
+        var entry = sortedArray[entryKey];
+        if(entry[groupName]!=groupNameValue) {
+          output.append(newStruct);
+          newStruct.show();
+          newStruct = struct.clone();
+          groupNameValue = entry[groupName];
+          newStruct.find("."+groupName.toLowerCase()).text(groupNameValue);
+        }
+        var tpl = this.createTemplate(entry);
+        newStruct.find(".templates").append(tpl);
+        tpl.show();
+      }
+      // Adding last one left
+      output.append(newStruct);
+      newStruct.show();
+    } else {
+      console.log("There should only be one group div at each level");
+      return;
+    }
+  }
 
   this.displayBibtex = function(input, output) {
     // parse bibtex input
     var b = new BibtexParser();
     b.setInput(input);
     b.bibtex();
+    var entries = b.getEntries();
     
     // save old entries to remove them later
-    var old = output.find("*");    
-
-    // iterate over bibTeX entries
-    var entries = b.getEntries();
-    for (var entryKey in entries) {
-      var entry = entries[entryKey];
-      
-      // find template
-      var tpl = $(".bibtex_template").clone().removeClass('bibtex_template');
-      
-      // find all keys in the entry
-      var keys = [];
-      for (var key in entry) {
-        keys.push(key.toUpperCase());
-      }
-      
-      // find all ifs and check them
-      var removed = false;
-      do {
-        // find next if
-        var conds = tpl.find(".if");
-        if (conds.size() == 0) {
-          break;
-        }
-        
-        // check if
-        var cond = conds.first();
-        cond.removeClass("if");
-        var ifTrue = true;
-        var classList = cond.attr('class').split(' ');
-        $.each( classList, function(index, cls){
-          if(keys.indexOf(cls.toUpperCase()) < 0) {
-            ifTrue = false;
-          }
-          cond.removeClass(cls);
-        });
-        
-        // remove false ifs
-        if (!ifTrue) {
-          cond.remove();
-        }
-      } while (true);
-      
-      // fill in remaining fields 
-      for (var index in keys) {
-        var key = keys[index];
-        var value = entry[key] || "";
-        tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
-        tpl.find("a." + key.toLowerCase()).attr('href', this.fixValue(value));
-      }
-      
-      output.append(tpl);
-      tpl.show();
-    }
+    var old = output.find("*");
     
+    var structure = $(".bibtex_structure").clone();
+    // If structure exists we need to do more complicated sorting with entries
+    if(structure.length) {
+      this.createStructure(structure,output,entries);
+    } else {
+      // iterate over bibTeX entries
+      for (var entryKey in entries) {
+        var entry = entries[entryKey];
+        
+        tpl = this.createTemplate(entry);
+        
+        output.append(tpl);
+        tpl.show();
+      }
+    }
     // remove old entries
     old.remove();
   }
@@ -339,7 +420,7 @@ function bibtex_js_draw() {
     $(document).ajaxStop(function() {
 	  // executed on completion of last outstanding ajax call
 	  (new BibtexDisplay()).displayBibtex(bibstring, $("#bibtex_display"));
-	});
+    });
   }
 }
 
