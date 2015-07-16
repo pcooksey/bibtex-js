@@ -1,6 +1,7 @@
 /* 
 * Author = Philip Cooksey
 * Credit = Henrik Mühe
+*
 * Issues:
 *  no comment handling within strings
 *  no string concatenation
@@ -334,44 +335,50 @@ function BibtexDisplay() {
   }
   
   this.createStructure = function(structure, output, entries) {
-    // Create array for sorting
-    var entriesArray = this.createArray(entries);
   
     var struct = structure.clone().removeClass('bibtex_structure');
-    var groups = struct.children(".group");
+    var groupParent = struct.children(".group");
+    var sort = struct.children(".sort");
     
-    if (groups.size() == 1) {
-      var group = groups.first();
+    if (groupParent.length) {
+      var group = groupParent.first();
       group.removeClass("group");
       var groupName = group.attr('class').toUpperCase();
-      group.removeClass(groupName.toLowerCase());
       var rule = group.attr('extra');
-      var sortedArray = this.sortArray(entriesArray, groupName, rule);
       
-      //Starting to create the page
-      var newStruct = struct.clone();
-      var groupNameValue = sortedArray[0][groupName];
-      newStruct.find("."+groupName.toLowerCase()).html(groupNameValue);
-      // iterate over bibTeX entries
-      for (var entryKey in sortedArray) {
-        var entry = sortedArray[entryKey];
-        if(entry[groupName]!=groupNameValue) {
-          output.append(newStruct);
-          newStruct.show();
-          newStruct = struct.clone();
-          groupNameValue = entry[groupName];
-          newStruct.find("."+groupName.toLowerCase()).text(groupNameValue);
-        }
+      //Sort the array based on group rules
+      var sortedArray = this.sortArray(entries, groupName, rule);
+      
+      // Get all the unique values for the groups
+      var values = [];
+      $.each(sortedArray, function(i, object) { 
+          if(groupName in object && $.inArray(object[groupName],values)===-1) {      
+            values.push(object[groupName]);
+            return;
+          }
+        });
+        
+      // Iterate through the values and recurively call this function
+      for( val in values) {
+        //Starting to create the page
+        var newStruct = struct.clone();
+        var groupNameValue = values[val];
+        newStruct.find("."+groupName.toLowerCase()).prepend("<h1 class='"+groupName+"'>"+groupNameValue+"</h1>");
+        splicedArray = $.grep(sortedArray, function(object, i) 
+          { return object[groupName] == groupNameValue; });
+        this.createStructure(groupParent, newStruct, splicedArray);
+        output.append(newStruct);
+      }
+    } else if(sort.length) {
+    
+    } else {
+      // iterate over bibTeX entries and add them to template
+      for (var entryKey in entries) {
+        var entry = entries[entryKey];
         var tpl = this.createTemplate(entry);
-        newStruct.find(".templates").append(tpl);
+        output.find(".templates").append(tpl);
         tpl.show();
       }
-      // Adding last one left
-      output.append(newStruct);
-      newStruct.show();
-    } else {
-      console.log("There should only be one group div at each level");
-      return;
     }
   }
 
@@ -388,7 +395,9 @@ function BibtexDisplay() {
     var structure = $(".bibtex_structure").clone();
     // If structure exists we need to do more complicated sorting with entries
     if(structure.length) {
-      this.createStructure(structure,output,entries);
+      // Create array for sorting
+      var entriesArray = this.createArray(entries);
+      this.createStructure(structure,output,entriesArray);
     } else {
       // iterate over bibTeX entries
       for (var entryKey in entries) {
