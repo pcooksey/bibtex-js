@@ -320,14 +320,26 @@ function BibtexDisplay() {
     return entriesArray;
   }
   
-  this.sortArray = function(array, key, rule) {
+  this.sortArray = function(array, key, rule, type) {
+    var keyUpper = key.toUpperCase();
     array = array.sort(function(a,b) { 
       switch(rule.toUpperCase()) {
         case "DESC":
-          return parseInt(a[key.toUpperCase()]) - parseInt(b[key.toUpperCase()]); break;
+          //Values remain the same
+          break;
         case "ASC":
-          return parseInt(b[key.toUpperCase()]) - parseInt(a[key.toUpperCase()]); break;
+          //Just swaping the values
+          var tmp = b; b = a; a = tmp;
+          break;
         default: 
+          return 0; break;
+      }
+      switch(type.toLowerCase()) {
+        case "string":
+          return b[keyUpper].toUpperCase().localeCompare(a[keyUpper].toUpperCase()); break;
+        case "number":
+          return parseInt(a[key.toUpperCase()]) - parseInt(b[key.toUpperCase()]); break;
+        default:
           return 0; break;
       }
     });
@@ -339,18 +351,18 @@ function BibtexDisplay() {
     level = level || 0;
   
     var struct = structure.clone().removeClass('bibtex_structure');
-    var groupParent = struct.children(".group");
-    var sortParent = struct.children(".sort");
+    var groupChild = struct.children(".group");
+    var sortChild = struct.children(".sort");
     
-    if (groupParent.length) {
-      console.log("Group " +level);
-      var group = groupParent.first();
+    if (groupChild.length) {
+      var group = groupChild.first();
       group.removeClass("group");
       var groupName = group.attr('class').toUpperCase();
-      var rule = group.attr('extra');
+      var rule = group.attr('extra').split(" ")[0];
+      var type = group.attr('extra').split(" ")[1];
       
       //Sort the array based on group rules
-      var sortedArray = this.sortArray(entries, groupName, rule);
+      var sortedArray = this.sortArray(entries, groupName, rule, type);
       
       // Get all the unique values for the groups
       var values = [];
@@ -367,12 +379,19 @@ function BibtexDisplay() {
         //Starting to create the page
         var newStruct = struct.clone();
         var groupNameValue = values[val];
-        newStruct.children("."+groupName.toLowerCase()).first().prepend("<h1 class='"+groupName+"'>"+this.fixValue(groupNameValue)+"</h1>");
+        //Add the header for the group
+        newStruct.children("."+groupName.toLowerCase()).first().prepend("<h"+(level+1)+" class='"
+                              +groupName+"'>"+this.fixValue(groupNameValue)+"</h"+(level+1)+">");
+        
+        //Divide the array into group with groupNameValue
         splicedArray = $.grep(sortedArray, function(object, i) 
           { return object[groupName] == groupNameValue; });
-        var tempStruct = this.createStructure(groupParent.clone(), output, splicedArray, level+1);
-        if(groupParent.children(".group").length) {
-          nextGroupName = "."+groupParent.children(".group").attr('class').split(' ').join('.');
+        
+        // Get back the struct to add to the page
+        var tempStruct = this.createStructure(groupChild.clone(), output, splicedArray, level+1);
+        //console.log(tempStruct.html());
+        if(groupChild.children(".group").length) {
+          nextGroupName = "."+groupChild.children(".group").attr('class').split(' ').join('.');
           newStruct.find(nextGroupName).replaceWith(tempStruct);
         } else {
           newStruct.find(".templates").append(tempStruct.find(".templates").html());
@@ -388,21 +407,20 @@ function BibtexDisplay() {
       } else {
         return globalStruct;
       }
-    } else if(sortParent.length) {
-      console.log("Sorting "+level);
-      var sortName = sortParent.attr('class').split(" ")[1].toUpperCase();
-      var rule = sortParent.attr('extra');
+    } else if(sortChild.length) {
+      var sortName = sortChild.attr('class').split(" ")[1].toUpperCase();
+      var rule = sortChild.first().attr('extra').split(" ")[0];
+      var type = sortChild.first().attr('extra').split(" ")[1];
       
       var sort = structure.children(".sort").first().clone();
       //Sort the array based on sort rules
-      var sortedArray = this.sortArray(entries, sortName, rule);
+      var sortedArray = this.sortArray(entries, sortName, rule, type);
       if(level==0) {
-        output.append(this.createStructure(sortParent, output, sortedArray, level+1));
+        output.append(this.createStructure(sortChild, output, sortedArray, level+1));
       } else {
-        return this.createStructure(sortParent, output, sortedArray, level+1);
+        return this.createStructure(sortChild, output, sortedArray, level+1);
       }
     } else {
-      console.log("Adding " +level);
       // iterate over bibTeX entries and add them to template
       for (var entryKey in entries) {
         var entry = entries[entryKey];
