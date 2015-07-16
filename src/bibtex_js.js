@@ -334,13 +334,16 @@ function BibtexDisplay() {
     return array;
   }
   
-  this.createStructure = function(structure, output, entries) {
+  this.createStructure = function(structure, output, entries, level) {
+    //Used during the search
+    level = level || 0;
   
     var struct = structure.clone().removeClass('bibtex_structure');
     var groupParent = struct.children(".group");
-    var sort = struct.children(".sort");
+    var sortParent = struct.children(".sort");
     
     if (groupParent.length) {
+      console.log("Group " +level);
       var group = groupParent.first();
       group.removeClass("group");
       var groupName = group.attr('class').toUpperCase();
@@ -359,26 +362,55 @@ function BibtexDisplay() {
         });
         
       // Iterate through the values and recurively call this function
+      globalStruct = $('<div></div>');
       for( val in values) {
         //Starting to create the page
         var newStruct = struct.clone();
         var groupNameValue = values[val];
-        newStruct.find("."+groupName.toLowerCase()).prepend("<h1 class='"+groupName+"'>"+groupNameValue+"</h1>");
+        newStruct.children("."+groupName.toLowerCase()).first().prepend("<h1 class='"+groupName+"'>"+this.fixValue(groupNameValue)+"</h1>");
         splicedArray = $.grep(sortedArray, function(object, i) 
           { return object[groupName] == groupNameValue; });
-        this.createStructure(groupParent, newStruct, splicedArray);
-        output.append(newStruct);
+        var tempStruct = this.createStructure(groupParent.clone(), output, splicedArray, level+1);
+        if(groupParent.children(".group").length) {
+          nextGroupName = "."+groupParent.children(".group").attr('class').split(' ').join('.');
+          newStruct.find(nextGroupName).replaceWith(tempStruct);
+        } else {
+          newStruct.find(".templates").append(tempStruct.find(".templates").html());
+        }
+        if(level==0) {
+          output.append(newStruct);
+        } else {
+          globalStruct.append(newStruct);
+        }
       }
-    } else if(sort.length) {
-    
+      if(level==0) {
+        return output;
+      } else {
+        return globalStruct;
+      }
+    } else if(sortParent.length) {
+      console.log("Sorting "+level);
+      var sortName = sortParent.attr('class').split(" ")[1].toUpperCase();
+      var rule = sortParent.attr('extra');
+      
+      var sort = structure.children(".sort").first().clone();
+      //Sort the array based on sort rules
+      var sortedArray = this.sortArray(entries, sortName, rule);
+      if(level==0) {
+        output.append(this.createStructure(sortParent, output, sortedArray, level+1));
+      } else {
+        return this.createStructure(sortParent, output, sortedArray, level+1);
+      }
     } else {
+      console.log("Adding " +level);
       // iterate over bibTeX entries and add them to template
       for (var entryKey in entries) {
         var entry = entries[entryKey];
         var tpl = this.createTemplate(entry);
-        output.find(".templates").append(tpl);
+        structure.find(".templates").append(tpl);
         tpl.show();
       }
+      return structure;
     }
   }
 
