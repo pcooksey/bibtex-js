@@ -1,17 +1,17 @@
 The default style for each entry can be specified explicitly using the below template system in you html code.
 
-Basic BibTeX template where you define what each entry will look like when printed.
+BibTeX template defines what each entry will look like when printed.
 ```html
   <div class="bibtex_template">
   </div>
 ```
 
-Language allows you to check if an entry value exist before printing the value (hidden otherwise).
+Check if an entry value exists before printing the value (hidden otherwise).
 ```html
 <span class="if year"><span class="year"></span>,</span>
 ```
 
-Demo example:
+Demo BibTeX template example:
 ```html
 <div class="bibtex_template">
   <div class="if author" style="font-weight: bold;">
@@ -29,21 +29,20 @@ Demo example:
 </div>
 ```
 
-Basic BibTeX structure allows for sorting and grouping of entries placed into the templates div (increases run time).
+BibTeX structure allows for sorting and grouping of entries placed into the templates div (increases run time).
 ```html
 <div class="bibtex_structure">
   <div class="templates"></div>
 </div>
 ```
 
-Language has group or sort with extra information describing information type (string, number) and sorting property (ASC, DESC) 
-
+Group or sort values along with adding extra information describing information type (string, number) and sorting property (ASC, DESC). BibTeX entries that do not contain the grouping value (ex. year) will be added to "Other Publications" at the end of the grouping.
 ```html
 <div class="group year" extra="ASC number"></div>
 <div class="sort title" extra="DESC string"></div>
 ```
 
-Demo structure example:
+Demo BibTeX structure example:
 ```html
 <div class="bibtex_structure">
   <div class="group year" extra="ASC number">
