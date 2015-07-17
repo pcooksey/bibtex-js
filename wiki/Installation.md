@@ -5,7 +5,7 @@ Load javascript, add this to your html code:
 <script type="text/javascript" src="https://raw.githubusercontent.com/pcooksey/bibtex-js/master/src/bibtex_js.js"></script>
 ```
 
-Place BibTeX link into <bibtex> or put bibtex text into a (hidden) textarea:
+Place BibTeX link into `<bibtex>` or put bibtex text into a (hidden) textarea:
 
 ```html
 <bibtex src="test.bib"></bibtex>

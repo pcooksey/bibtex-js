@@ -1,6 +1,6 @@
-The default style can be specified explicitly by adding the following to your html code:
+The default style for each entry can be specified explicitly using the below template system in you html code.
 
-Basic bibtex template where you define what each entry will look like when printed.
+Basic BibTeX template where you define what each entry will look like when printed.
 ```html
   <div class="bibtex_template">
   </div>
@@ -29,7 +29,7 @@ Demo example:
 </div>
 ```
 
-Basic bibtex structure allows for sorting and grouping of entries placed into the templates div (increases run time).
+Basic BibTeX structure allows for sorting and grouping of entries placed into the templates div (increases run time).
 ```html
 <div class="bibtex_structure">
   <div class="templates"></div>
