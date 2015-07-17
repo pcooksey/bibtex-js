@@ -2,12 +2,14 @@ Load javascript, add this to your html code:
 
 ```
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script type="text/javascript" src="http://bibtex-js.googlecode.com/svn/trunk/src/bibtex_js.js"></script>
+<script type="text/javascript" src="https://raw.githubusercontent.com/pcooksey/bibtex-js/master/src/bibtex_js.js"></script>
 ```
 
-Put bibtex input into a (hidden) textarea:
+Place bibtex link into or put bibtex input into a (hidden) textarea:
 
 ```
+<bibtex src="test.bib"></bibtex>
+
 <textarea id="bibtex_input" style="display:none;">
 @book{book1,
   author = "Donald Knuth",
