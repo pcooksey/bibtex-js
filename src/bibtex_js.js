@@ -1,5 +1,6 @@
 /* 
 * Author = Philip Cooksey
+* Edited = July 2015
 * Credit = Henrik Mühe
 *
 * Issues:
@@ -323,22 +324,26 @@ function BibtexDisplay() {
   this.sortArray = function(array, key, rule, type) {
     var keyUpper = key.toUpperCase();
     array = array.sort(function(a,b) { 
+      var aValue = "", bValue = "";
+      // Need to check if values exist
+      aValue = (keyUpper in a) ?  a[keyUpper] : ""; 
+      bValue = (keyUpper in b) ?  b[keyUpper] : ""; 
       switch(rule.toUpperCase()) {
         case "DESC":
           //Values remain the same
           break;
         case "ASC":
           //Just swaping the values
-          var tmp = b; b = a; a = tmp;
+          var tmp = bValue; bValue = aValue; aValue = tmp;
           break;
         default: 
           return 0; break;
       }
       switch(type.toLowerCase()) {
         case "string":
-          return b[keyUpper].toUpperCase().localeCompare(a[keyUpper].toUpperCase()); break;
+          return bValue.toUpperCase().localeCompare(aValue.toUpperCase()); break;
         case "number":
-          return parseInt(a[key.toUpperCase()]) - parseInt(b[key.toUpperCase()]); break;
+          return parseInt(aValue) - parseInt(bValue); break;
         default:
           return 0; break;
       }
@@ -347,6 +352,7 @@ function BibtexDisplay() {
   }
   
   this.createStructure = function(structure, output, entries, level) {
+    var MissingGroup = "Other Publications";
     //Used during the search
     level = level || 0;
   
@@ -363,7 +369,7 @@ function BibtexDisplay() {
       
       //Sort the array based on group rules
       var sortedArray = this.sortArray(entries, groupName, rule, type);
-      
+      console.log(sortedArray);
       // Get all the unique values for the groups
       var values = [];
       $.each(sortedArray, function(i, object) { 
@@ -372,6 +378,7 @@ function BibtexDisplay() {
             return;
           }
         });
+      values.push(MissingGroup); //This is for checking none grouped publications
         
       // Iterate through the values and recurively call this function
       globalStruct = $('<div></div>');
@@ -384,22 +391,29 @@ function BibtexDisplay() {
                               +groupName+"'>"+this.fixValue(groupNameValue)+"</h"+(level+1)+">");
         
         //Divide the array into group with groupNameValue
-        splicedArray = $.grep(sortedArray, function(object, i) 
-          { return object[groupName] == groupNameValue; });
-        
-        // Get back the struct to add to the page
-        var tempStruct = this.createStructure(groupChild.clone(), output, splicedArray, level+1);
-        //console.log(tempStruct.html());
-        if(groupChild.children(".group").length) {
-          nextGroupName = "."+groupChild.children(".group").attr('class').split(' ').join('.');
-          newStruct.find(nextGroupName).replaceWith(tempStruct);
-        } else {
-          newStruct.find(".templates").append(tempStruct.find(".templates").html());
-        }
-        if(level==0) {
-          output.append(newStruct);
-        } else {
-          globalStruct.append(newStruct);
+        splicedArray = $.grep(sortedArray, function(object, i) { 
+            if(groupNameValue==MissingGroup) {
+              return (typeof object[groupName] === "undefined")?true:false;
+            } else {
+              return object[groupName] == groupNameValue;
+            }
+          });
+          
+        if(splicedArray.length) {
+          // Get back the struct to add to the page
+          var tempStruct = this.createStructure(groupChild.clone(), output, splicedArray, level+1);
+          //console.log(tempStruct.html());
+          if(groupChild.children(".group").length) {
+            nextGroupName = "."+groupChild.children(".group").attr('class').split(' ').join('.');
+            newStruct.find(nextGroupName).replaceWith(tempStruct);
+          } else {
+            newStruct.find(".templates").append(tempStruct.find(".templates").html());
+          }
+          if(level==0) {
+            output.append(newStruct);
+          } else {
+            globalStruct.append(newStruct);
+          }
         }
       }
       if(level==0) {
