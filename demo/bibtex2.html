@@ -10,13 +10,12 @@
     
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
     <script src="../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    <!-- <bibtex src="https://raw.githubusercontent.com/CoolProp/CoolProp/master/CoolPropBibTeXLibrary.bib"></bibtex> -->
     <bibtex src="test.bib"></bibtex>
     
     <style>
-    body{ font: 80% "Trebuchet MS", sans-serif; margin: 10px;}
-    textarea { font-size: 8pt; width: 500px; height: 150px; }
+    bibtex { display: none; }
     #bibtex_errors { margin-top:10px; color: red;}
-    h1 { font-size: 12pt; margin-top:20px; }
     </style>
   </head>
 <body>
@@ -26,8 +25,7 @@
 
 <div class="bibtex_structure">
   <div class="group year" extra="ASC number">
-    <div class="group author" extra="ASC string">
-      <div class="sort title" extra="ASC string">
+    <div class="group journal" extra="ASC string">
         <div class="templates"></div>
       </div>
     </div>

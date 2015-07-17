@@ -220,7 +220,7 @@ function BibtexParser() {
   }
 
   this.comment = function() {
-    this.value(); // this is wrong
+    this.pos = this.input.indexOf("}",this.pos);
   }
 
   this.entry = function() {
@@ -243,6 +243,9 @@ function BibtexParser() {
         this.entry();
       }
       this.match("}");
+      if (this.tryMatch(",")){
+          this.match(",");
+      }
     }
     this.entries[this.currentEntry]["bibtexraw"] = bibtexraw[i++];
   }
@@ -369,7 +372,7 @@ function BibtexDisplay() {
       
       //Sort the array based on group rules
       var sortedArray = this.sortArray(entries, groupName, rule, type);
-      console.log(sortedArray);
+      
       // Get all the unique values for the groups
       var values = [];
       $.each(sortedArray, function(i, object) { 
@@ -402,7 +405,7 @@ function BibtexDisplay() {
         if(splicedArray.length) {
           // Get back the struct to add to the page
           var tempStruct = this.createStructure(groupChild.clone(), output, splicedArray, level+1);
-          //console.log(tempStruct.html());
+          
           if(groupChild.children(".group").length) {
             nextGroupName = "."+groupChild.children(".group").attr('class').split(' ').join('.');
             newStruct.find(nextGroupName).replaceWith(tempStruct);
