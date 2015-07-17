@@ -228,8 +228,8 @@ function BibtexParser() {
   }
 
   this.bibtex = function() {
-    var i = 0;
-    bibtexraw = this.input.split('@');
+    var i = 1;
+    bibtexraw = this.input.substring(this.input.indexOf("@"),this.input.length).split('@');
     while(this.tryMatch("@")) {
       var d = this.directive().toUpperCase();
       this.match("{");
@@ -246,8 +246,8 @@ function BibtexParser() {
       if (this.tryMatch(",")){
           this.match(",");
       }
+      this.entries[this.currentEntry]["BIBTEXRAW"] = bibtexraw[i++];
     }
-    this.entries[this.currentEntry]["bibtexraw"] = bibtexraw[i++];
   }
 }
 
@@ -310,9 +310,14 @@ function BibtexDisplay() {
     for (var index in keys) {
       var key = keys[index];
       var value = entry[key] || "";
-      tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
+      if(key=="BIBTEXRAW") {
+        tpl.find("." + key.toLowerCase()).html("@"+value);
+      } else {
+        tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
+      }
       tpl.find("a." + key.toLowerCase()).attr('href', this.fixValue(value));
     }
+    tpl.addClass("bibtexentry");
     return tpl;
   }
   
@@ -365,7 +370,6 @@ function BibtexDisplay() {
     
     if (groupChild.length) {
       var group = groupChild.first();
-      //group.removeClass("group");
       var groupName = group.attr('class').split(" ")[1].toUpperCase();
       var rule = group.attr('extra').split(" ")[0];
       var type = group.attr('extra').split(" ")[1];
@@ -405,7 +409,6 @@ function BibtexDisplay() {
         if(splicedArray.length) {
           // Get back the struct to add to the page
           var tempStruct = this.createStructure(groupChild.clone(), output, splicedArray, level+1);
-          
           if(groupChild.children(".group").length) {
             nextGroupName = "."+groupChild.children(".group").attr('class').split(' ').join('.');
             newStruct.find(nextGroupName).replaceWith(tempStruct.find(nextGroupName));
