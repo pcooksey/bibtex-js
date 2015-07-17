@@ -365,8 +365,8 @@ function BibtexDisplay() {
     
     if (groupChild.length) {
       var group = groupChild.first();
-      group.removeClass("group");
-      var groupName = group.attr('class').toUpperCase();
+      //group.removeClass("group");
+      var groupName = group.attr('class').split(" ")[1].toUpperCase();
       var rule = group.attr('extra').split(" ")[0];
       var type = group.attr('extra').split(" ")[1];
       
@@ -376,7 +376,7 @@ function BibtexDisplay() {
       // Get all the unique values for the groups
       var values = [];
       $.each(sortedArray, function(i, object) { 
-          if(groupName in object && $.inArray(object[groupName],values)===-1) {      
+          if(groupName in object && $.inArray(object[groupName],values)===-1){    
             values.push(object[groupName]);
             return;
           }
@@ -408,7 +408,7 @@ function BibtexDisplay() {
           
           if(groupChild.children(".group").length) {
             nextGroupName = "."+groupChild.children(".group").attr('class').split(' ').join('.');
-            newStruct.find(nextGroupName).replaceWith(tempStruct);
+            newStruct.find(nextGroupName).replaceWith(tempStruct.find(nextGroupName));
           } else {
             newStruct.find(".templates").append(tempStruct.find(".templates").html());
           }
@@ -465,6 +465,7 @@ function BibtexDisplay() {
       // Create array for sorting
       var entriesArray = this.createArray(entries);
       this.createStructure(structure,output,entriesArray);
+      $(".bibtex_structure").remove();
     } else {
       // iterate over bibTeX entries
       for (var entryKey in entries) {
@@ -487,15 +488,16 @@ function bibtex_js_draw() {
   if($("#bibtex_input").length){
     (new BibtexDisplay()).displayBibtex($("#bibtex_input").val(), $("#bibtex_display"));
   } else {
+    //Gets the BibTex files and adds them together
     var bibstring = "";
     $('bibtex').each(function(index, value) {
        $.get($(this).attr('src'), function(data) {
         bibstring += data;
       });
     });
+    // Executed on completion of last outstanding ajax call
     $(document).ajaxStop(function() {
-	  // executed on completion of last outstanding ajax call
-	  (new BibtexDisplay()).displayBibtex(bibstring, $("#bibtex_display"));
+      (new BibtexDisplay()).displayBibtex(bibstring, $("#bibtex_display"));
     });
   }
 }
