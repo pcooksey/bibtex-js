@@ -56,6 +56,10 @@ function BibtexParser() {
   this.getBibTexRaw = function() {
   	return this.bibtexraw;
   }
+  
+  this.errorThrown = function(str) {
+    $("#bibtex_errors").html(str);
+  }
 
   this.isWhitespace = function(s) {
     return (s == ' ' || s == '\r' || s == '\t' || s == '\n');
@@ -505,6 +509,113 @@ function bibtex_js_draw() {
   }
 }
 
+/** 
+BibTex Searcher is used with input form
+*/
+function BibTeXSearcher() {
+  this.inputArray = new Array();
+  
+  this.setInputArray = function(val) {
+    this.inputArray = val;
+  }
+  
+  this.checkEntry = function(entry, word) {
+    var found = false;
+    entry.find("span").each( 
+      function() {
+        if(entry.text().search(new RegExp(word, "i")) > -1
+           && entry.is(":visible")) {
+          found = true;
+        }
+      });
+    return found;
+  }
+  
+  this.unhideAll = function() {
+    $("div#bibtex_display").children().each( 
+        function () {
+          $(this).show();
+          $(this).find(".bibtexentry").each(
+            function() {
+              $(this).show();
+            });
+      });
+  }
+  
+  this.hideEntry = function(word) {
+    var funcCaller = this;
+    var container = $("div#bibtex_display").children();
+    if(container.first().hasClass("bibtexentry")){
+      container.each(
+        function() {
+          if(!funcCaller.checkEntry($(this),word)){
+            $(this).hide();
+          } 
+        });
+    } else {
+      container.each( 
+        function () {
+          var shouldHide = true;
+          $(this).find(".bibtexentry").each( 
+            function() {
+              if(!funcCaller.checkEntry($(this),word)){
+                $(this).hide();
+              } else {
+                shouldHide = false;
+              }
+            });
+          if(shouldHide) {
+            $(this).hide();
+          }
+        }); 
+    }
+  }
+  
+  this.searcher = function(input) {
+    var string = input.val();
+    var funcCaller = this;
+    if(string.length) {
+      var splitInput = string.split(" ");
+      //Something has been deleted if true
+      if(splitInput.length<this.inputArray.length){
+        this.unhideAll();
+        for(var word in splitInput) {
+          this.hideEntry(splitInput[word]);
+        }
+      } else {
+        if(string.indexOf(" ") > -1) {
+          var index = splitInput.length-1;
+          if(splitInput[index]=="") {
+            word = splitInput[index-1];
+            this.hideEntry(word);
+          }
+        }
+      }
+      this.setInputArray(splitInput);
+    } else if(!string.length) {
+      this.unhideAll();
+    }
+  }
+}
+
+function createWebPage(defaultTemplate) {
+  // draw bibtex when loaded
+  $(document).ready(function () {
+    // check for template, add default
+    if ($(".bibtex_template").size() == 0) {
+      $("body").append(defaultTemplate);
+    }
+    bibtex_js_draw();
+    
+    // Checking for extra features
+    var input = $("input.bibtex_search");
+    if(input.length) {
+      BibTeXSearcherClass = new BibTeXSearcher();
+      input.keyup(function() { BibTeXSearcherClass.searcher(input); });
+    }
+  });
+}
+
 // check whether or not jquery is present
 if (!window.jQuery) {
   //Add jquery to the webpage
@@ -520,7 +631,8 @@ if (!window.jQuery) {
           window.setTimeout(function() { checkReady(callback); }, 100);
       }
   };
-  var defaultTemplate = "<div class=\"bibtex_template\"><div class=\"if author\" style=\"font-weight: bold;\">\n"+
+  var defaultTemplate = "<div class=\"bibtex_template\">"+
+                        "<div class=\"if author\" style=\"font-weight: bold;\">\n"+
                         "<span class=\"if year\">\n"+
                         "<span class=\"year\"></span>,\n"+
                         "</span>\n  <span class=\"author\"></span>\n"+
@@ -529,23 +641,8 @@ if (!window.jQuery) {
                         "</span>\n</div>\n<div style=\"margin-left: 10px; margin-bottom:5px;\">\n"+
                         "<span class=\"title\"></span>\n</div></div>";
   // Start polling...
-  checkReady(function($) {
-    // draw bibtex when loaded
-    $(document).ready(function () {
-      // check for template, add default
-      if ($(".bibtex_template").size() == 0) {
-        $("body").append(defaultTemplate);
-      }
-      bibtex_js_draw();
-    });
-  });
+  checkReady(function($){createWebPage(defaultTemplate);});
 } else {
-  // draw bibtex when loaded
-  $(document).ready(function () {
-    // check for template, add default
-    if ($(".bibtex_template").size() == 0) {
-      $("body").append(defaultTemplate);
-    }
-    bibtex_js_draw();
-  });
+  // Create the webpage
+  createWebPage(defaultTemplate);
 }

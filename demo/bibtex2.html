@@ -19,16 +19,23 @@
     </style>
   </head>
 <body>
+
+<input type="text" class="bibtex_search" list="suggests">
+
+<datalist id="suggests">
+    <option value="Black">
+    <option value="Red">
+    <option value="Green">
+    <option value="Blue">
+    <option value="White">
+</datalist>
   
 <div id="bibtex_errors"></div>
 <h1> Rendered Publications</h1>
 
 <div class="bibtex_structure">
   <div class="group year" extra="ASC number">
-    <div class="group journal" extra="ASC string">
-        <div class="templates"></div>
-      </div>
-    </div>
+      <div class="templates"></div>
   </div>
 </div>
 
@@ -53,21 +60,6 @@
   </div>
   
 </div>
-
-<script type="text/javascript" charset="utf-8">
-  refresh = false;
-  window.setInterval(function() {
-    if (refresh) {
-      try {
-        $("#bibtex_errors").html("");
-        bibtex_js_draw();
-      } catch (err) {
-        $("#bibtex_errors").html(err.substring(0, 100) + "...");
-      }
-      refresh = false;
-    }
-  }, 500);
-</script>
 
 </body>
 </html>
