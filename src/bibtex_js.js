@@ -169,7 +169,7 @@ function BibtexParser() {
         throw "Runaway key";
       }
     
-      if (this.input[this.pos].match("[a-zA-Z0-9_:\\./-]")) {
+      if (this.input[this.pos].match("[a-zA-Z0-9_:?\\./'+-]")) {
         this.pos++
       } else {
         return this.input.substring(start, this.pos).toUpperCase();
@@ -310,7 +310,7 @@ function BibtexDisplay() {
                 value = value.replace(key,latex_to_unicode[newkey]);
                 //console.log("Found: "+newkey);
               } else {
-                console.log("Missing: "+key+" "+newkey);
+                //console.log("Missing: "+key+" "+newkey);
                 str = "";
               }
             }
