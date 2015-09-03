@@ -120,13 +120,20 @@ function BibtexParser() {
   }
 
   this.value_quotes = function() {
+  	var bracecount = 0;
     this.match('"');
     var start = this.pos;
     while(true) {
-      if (this.input[this.pos] == '"' && this.input[this.pos-1] != '\\') {
+      if (this.input[this.pos] == '"' && this.input[this.pos-1] != '\\' && bracecount == 0) {
           var end = this.pos;
           this.match('"');
           return this.input.substring(start, end);
+      } else if (this.input[this.pos] == '{') {
+      	bracecount++;
+      } else if (this.input[this.pos] == '}') {
+      	if (bracecount > 0) {
+          bracecount--;
+        }
       } else if (this.pos == this.input.length-1) {
         throw "Unterminated value:" + this.input.substring(start);
       }
@@ -236,7 +243,11 @@ function BibtexParser() {
     bibtexraw = this.input.substring(this.input.indexOf("@"),this.input.length).split('@');
     while(this.tryMatch("@")) {
       var d = this.directive().toUpperCase();
-      this.match("{");
+      if (this.tryMatch("{")){
+          this.match("{");
+      } else {
+      	this.match("(");
+      }
       if (d == "@STRING") {
         this.string();
       } else if (d == "@PREAMBLE") {
@@ -246,7 +257,11 @@ function BibtexParser() {
       } else {
         this.entry();
       }
-      this.match("}");
+      if (this.tryMatch("}")){
+          this.match("}");
+      } else {
+      	this.match(")");
+      }
       if (this.tryMatch(",")){
           this.match(",");
       }
@@ -626,7 +641,6 @@ function BibTeXSearcher() {
   
   this.searcher = function(input) {
     var string = input.val();
-    var funcCaller = this;
     if(string.length) {
       var splitInput = string.split(" ");
       this.unhideAll();
