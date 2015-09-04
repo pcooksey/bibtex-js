@@ -383,6 +383,15 @@ function BibtexDisplay() {
       }
     } while (true);
     
+    tpl.find('.bibtexVar').each(function() {
+      var key = this.attributes["extra"].value;
+	  $.each(this.attributes, function(i, attrib){
+	     var value = attrib.value;
+	     value = value.replace("\+"+key+"\+", entry[key]);
+	     attrib.value = value;
+	  });
+	});
+    
     // fill in remaining fields 
     for (var index in keys) {
       var key = keys[index];
@@ -392,13 +401,16 @@ function BibtexDisplay() {
       } else {
         tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
         //<a> Link logic below
-        var link = tpl.find("a." + key.toLowerCase());
-        if(link.length > 0 && link.attr("href") != ""){
-       	  var str = link.attr("href").replace("\+"+key+"\+", value);
-       	  link.attr('href', str);
-       	} else {
-       	  link.attr('href', this.fixValue(value));
-       	}
+        var link = tpl.find("a." + key.toLowerCase()).each(function() {
+		  $.each(this.attributes, function(i, attrib){
+		     var attrvalue = attrib.value;
+		     attrvalue = attrvalue.replace("\+"+key+"\+", value);
+		     attrib.value = attrvalue;
+		  });
+		  if(this.attributes["href"] == "") {
+		  	this.attributes["href"].value = this.fixValue(value);
+		  }
+		});
       }
     }
     tpl.addClass("bibtexentry");
