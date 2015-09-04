@@ -457,6 +457,9 @@ function BibtexDisplay() {
           }
         });
       values.push(MissingGroup); //This is for checking none grouped publications
+      
+      //Get the bibtex topics html here.
+      var topics = $(".bibtex_topics");
         
       // Iterate through the values and recurively call this function
       globalStruct = $('<div></div>');
@@ -466,7 +469,7 @@ function BibtexDisplay() {
         var groupNameValue = values[val];
         //Add the header for the group
         newStruct.children("."+groupName.toLowerCase()).first().prepend("<h"+(level+1)+" class='"
-                              +groupName+"'>"+this.fixValue(groupNameValue)+"</h"+(level+1)+">");
+                              +groupName+"' id=\""+groupNameValue+"\">"+this.fixValue(groupNameValue)+"</h"+(level+1)+">");
         
         //Divide the array into group with groupNameValue
         splicedArray = $.grep(sortedArray, function(object, i) { 
@@ -478,6 +481,10 @@ function BibtexDisplay() {
           });
           
         if(splicedArray.length) {
+          //Add the topic value to the topics structure if it exists on the page
+          if(topics.length && level==0) {
+            topics.append(" - <a href=\"#"+groupNameValue+"\"> "+groupNameValue+" </a>");
+          }
           // Get back the struct to add to the page
           var tempStruct = this.createStructure(groupChild.clone(), output, splicedArray, level+1);
           if(groupChild.children(".group").length) {
