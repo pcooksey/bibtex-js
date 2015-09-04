@@ -42,6 +42,7 @@ function BibtexParser() {
       DEC: "December"
   };
   this.currentKey = "";
+  this.rawCurrentKey = "";
   this.currentEntry = "";
   
 
@@ -179,10 +180,12 @@ function BibtexParser() {
       if (this.input[this.pos].match("[a-zA-Z0-9_:?\\./'+-]")) {
         this.pos++
       } else {
-        return this.input.substring(start, this.pos).toUpperCase();
+      	this.rawCurrentKey = this.input.substring(start, this.pos);
+        return this.rawCurrentKey.toUpperCase();
       }
     }
   }
+
 
   this.key_equals_value = function() {
     var key = this.key();
@@ -211,7 +214,8 @@ function BibtexParser() {
 
   this.entry_body = function() {
     this.currentEntry = this.key();
-    this.entries[this.currentEntry] = new Object();    
+    this.entries[this.currentEntry] = new Object();
+    this.entries[this.currentEntry]["BIBTEXKEY"] = this.rawCurrentKey;   
     this.match(",");
     this.key_value_list();
   }
@@ -258,12 +262,12 @@ function BibtexParser() {
       } else {
         this.entry();
       }
+      end = this.pos+1;
       if (this.tryMatch("}")){
           this.match("}");
       } else {
       	this.match(")");
       }
-      end = this.pos;
       if (this.tryMatch(",")){
           this.match(",");
       }
