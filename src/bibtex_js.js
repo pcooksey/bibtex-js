@@ -239,9 +239,10 @@ function BibtexParser() {
   }
 
   this.bibtex = function() {
-    var i = 1;
-    bibtexraw = this.input.substring(this.input.indexOf("@"),this.input.length).split('@');
+    var start = 0;
+    var end = 0;
     while(this.tryMatch("@")) {
+      start = this.pos;
       var d = this.directive().toUpperCase();
       if (this.tryMatch("{")){
           this.match("{");
@@ -262,10 +263,11 @@ function BibtexParser() {
       } else {
       	this.match(")");
       }
+      end = this.pos;
       if (this.tryMatch(",")){
           this.match(",");
       }
-      this.entries[this.currentEntry]["BIBTEXRAW"] = bibtexraw[i++];
+      this.entries[this.currentEntry]["BIBTEXRAW"] = this.input.substring(start,end);
     }
   }
 }
@@ -382,7 +384,7 @@ function BibtexDisplay() {
       var key = keys[index];
       var value = entry[key] || "";
       if(key=="BIBTEXRAW") {
-        tpl.find("." + key.toLowerCase()).html("@"+value);
+        tpl.find("." + key.toLowerCase()).html(value);
       } else {
         tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
         tpl.find("a." + key.toLowerCase()).attr('href', this.fixValue(value));
