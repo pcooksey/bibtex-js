@@ -391,7 +391,15 @@ function BibtexDisplay() {
         tpl.find("." + key.toLowerCase()).html(value);
       } else {
         tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
-        tpl.find("a." + key.toLowerCase()).attr('href', this.fixValue(value));
+        //<a> Link logic below
+        var link = tpl.find("a." + key.toLowerCase());
+        if(link.length > 0 && link.attr("href") != ""){
+       	  var str = link.attr("href").replace("\+"+key+"\+", value);
+       	  link.attr('href', str);
+       	} else {
+       	  link.attr('href', this.fixValue(value));
+       	}
+      }
       }
     }
     tpl.addClass("bibtexentry");
