@@ -400,7 +400,6 @@ function BibtexDisplay() {
        	  link.attr('href', this.fixValue(value));
        	}
       }
-      }
     }
     tpl.addClass("bibtexentry");
     return tpl;
