@@ -346,6 +346,19 @@ function BibtexDisplay() {
     return value;
   }
   
+  this.displayAuthor = function(string){
+  	var arrayString = string.split(" and ");
+  	var newString = arrayString[0];
+  	for (i = 1; i < arrayString.length; i++) {
+  	  if(i+1>=arrayString.length) {
+  	    newString += ", and " + arrayString[i];
+  	  } else {
+	    newString += ", " + arrayString[i];
+	  }
+	}
+	return newString;
+  }
+  
   this.createTemplate = function(entry){
     // find template
     var tpl = $(".bibtex_template").clone().removeClass('bibtex_template');
@@ -398,6 +411,8 @@ function BibtexDisplay() {
       var value = entry[key] || "";
       if(key=="BIBTEXRAW") {
         tpl.find("." + key.toLowerCase()).html(value);
+      } else if(key=="AUTHOR") {
+      	tpl.find("span:not(a)." + key.toLowerCase()).html(this.displayAuthor(this.fixValue(value)));
       } else {
         tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
         //<a> Link logic below
