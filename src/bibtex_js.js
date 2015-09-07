@@ -177,7 +177,7 @@ function BibtexParser() {
         throw "Runaway key";
       }
     
-      if (this.input[this.pos].match("[a-zA-Z0-9_:?\\./'+-]")) {
+      if (this.input[this.pos].match("[a-zA-Z0-9_:?\\./'\\+\\-\\*]")) {
         this.pos++
       } else {
       	this.rawCurrentKey = this.input.substring(start, this.pos);
@@ -204,7 +204,7 @@ function BibtexParser() {
     while (this.tryMatch(",")) {
       this.match(",");
       // fixes problems with commas at the end of a list
-      if (this.tryMatch("}")) {
+      if (this.tryMatch("}") || this.tryMatch(")")) {
         break;
       }
       kv = this.key_equals_value();
@@ -271,14 +271,14 @@ function BibtexParser() {
       if (this.tryMatch(",")){
           this.match(",");
       }
+      // In case there is extra stuff in between entries
+      this.pos = end + this.input.substring(end,this.input.length).indexOf("@");
       this.entries[this.currentEntry]["BIBTEXRAW"] = this.input.substring(start,end);
     }
   }
 }
 
 function BibtexDisplay() {
-
-  //this.latex_to_unicode = {};
 
   this.invert = function (obj) {
     var new_obj = {};
@@ -302,7 +302,6 @@ function BibtexDisplay() {
   this.regExps.push(new RegExp("\\\\(?![:\\\\\])\\W{1}")); // 4
   
   this.fixValue = function (value) {
-    //console.log(value);
     do {
       var removeBrackets = value.match(/^\{(.*?)\}$/g, '$1');
       if(removeBrackets)
@@ -314,7 +313,6 @@ function BibtexDisplay() {
     // Working on a more efficient way of processing the latex
     var index = value.indexOf("\\");
     if(index > -1) {
-      //console.log(value);
       for(var exp in this.regExps) {
         do {
           var str = value.match(this.regExps[exp]);
@@ -323,15 +321,12 @@ function BibtexDisplay() {
             if(typeof(latex_to_unicode[key]) != "undefined")
             {
               value = value.replace(key,latex_to_unicode[key]);
-              //console.log("Found: "+key);
             } else {
               var newkey = key.replace(new RegExp("(\\w)"), '{$1}')
               if(typeof(latex_to_unicode[newkey]) != "undefined")
               {
                 value = value.replace(key,latex_to_unicode[newkey]);
-                //console.log("Found: "+newkey);
               } else {
-                //console.log("Missing: "+key+" "+newkey);
                 str = "";
               }
             }
@@ -340,7 +335,6 @@ function BibtexDisplay() {
           }
         } while(str.length);
       }
-      //console.log(value);
     }
     value = value.replace(/[\{|\}]/g, '');
     return value;
