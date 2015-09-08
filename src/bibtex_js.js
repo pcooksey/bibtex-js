@@ -212,10 +212,19 @@ function BibtexParser() {
     }
   }
 
-  this.entry_body = function() {
+  this.entry_body = function(directive) {
     this.currentEntry = this.key();
     this.entries[this.currentEntry] = new Object();
-    this.entries[this.currentEntry]["BIBTEXKEY"] = this.rawCurrentKey;   
+    this.entries[this.currentEntry]["BIBTEXKEY"] = this.rawCurrentKey;
+    if (directive == "@INCOLLECTION") {
+      this.entries[this.currentEntry]["BIBTEXTYPE"] = "book chapter";
+	} else if (directive == "@INPROCEEDINGS") {
+	  this.entries[this.currentEntry]["BIBTEXTYPE"] = "conference, workshop";
+	} else if (directive == "@ARTICLE") {
+	  this.entries[this.currentEntry]["BIBTEXTYPE"] = "journal";
+	} else if (directive == "@TECHREPORT") {
+	  this.entries[this.currentEntry]["BIBTEXTYPE"] = "technical report";
+	}   
     this.match(",");
     this.key_value_list();
   }
@@ -238,8 +247,8 @@ function BibtexParser() {
     this.pos = this.input.indexOf("}",this.pos);
   }
 
-  this.entry = function() {
-    this.entry_body();
+  this.entry = function(directive) {
+    this.entry_body(directive);
   }
 
   this.bibtex = function() {
@@ -260,7 +269,7 @@ function BibtexParser() {
       } else if (d == "@COMMENT") {
         this.comment();
       } else {
-        this.entry();
+        this.entry(d);
       }
       end = this.pos+1;
       if (this.tryMatch("}")){
@@ -341,7 +350,7 @@ function BibtexDisplay() {
   }
   
   this.displayAuthor = function(string){
-  	var arrayString = string.split(" and ");
+  	var arrayString = string.split(new RegExp("[\\s]+and[\\s]+"));
   	var newString = arrayString[0];
   	for (i = 1; i < arrayString.length; i++) {
   	  if(i+1>=arrayString.length) {
@@ -409,16 +418,10 @@ function BibtexDisplay() {
       	tpl.find("span:not(a)." + key.toLowerCase()).html(this.displayAuthor(this.fixValue(value)));
       } else {
         tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
-        //<a> Link logic below
         var link = tpl.find("a." + key.toLowerCase()).each(function() {
-		  $.each(this.attributes, function(i, attrib){
-		     var attrvalue = attrib.value;
-		     attrvalue = attrvalue.replace("\+"+key+"\+", value);
-		     attrib.value = attrvalue;
-		  });
-		  if(this.attributes["href"] == "") {
-		  	this.attributes["href"].value = this.fixValue(value);
-		  }
+	        if(this.attributes["href"] == "") {
+			  this.attributes["href"].value = this.fixValue(value);
+			}
 		});
       }
     }
@@ -630,11 +633,12 @@ function BibTeXSearcher() {
   
   this.checkEntry = function(entry, word) {
     var found = false;
-    entry.find("span").each( 
+    entry.find("span:not(.noread)").each( 
       function() {
-        if(entry.text().search(new RegExp(word, "i")) > -1
+        if($(this).text().search(new RegExp(word, "i")) > -1
            && entry.is(":visible")) {
           found = true;
+          return false; //Break out of loop
         }
       });
     return found;
@@ -654,18 +658,18 @@ function BibTeXSearcher() {
   this.hideEntry = function(word) {
     var funcCaller = this;
     var container = $("div#bibtex_display").children();
-    if(container.first().hasClass("bibtexentry")){
+    if(container.first().hasClass("bibtexentry:visible")){
       container.each(
         function() {
           if(!funcCaller.checkEntry($(this),word)){
             $(this).hide();
           } 
-        });
+       });
     } else {
       container.each( 
         function () {
           var shouldHide = true;
-          $(this).find(".bibtexentry").each( 
+          $(this).find(".bibtexentry:visible").each( 
             function() {
               if(!funcCaller.checkEntry($(this),word)){
                 $(this).hide();
@@ -673,10 +677,11 @@ function BibTeXSearcher() {
                 shouldHide = false;
               }
             });
+          // Hides outside div
           if(shouldHide) {
             $(this).hide();
           }
-        }); 
+       }); 
     }
   }
   
