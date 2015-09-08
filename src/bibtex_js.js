@@ -573,7 +573,6 @@ function BibtexDisplay() {
     b.setInput(input);
     b.bibtex();
     var entries = b.getEntries();
-    //this.latex_to_unicode = this.invert(unicode_to_latex);
     
     // save old entries to remove them later
     var old = output.find("*");
@@ -625,10 +624,12 @@ function bibtex_js_draw() {
 BibTex Searcher is used with input form
 */
 function BibTeXSearcher() {
-  this.inputArray = new Array();
+  this.inputArray = new Array("");
+  this.inputLength = 0;
   
   this.setInputArray = function(val) {
     this.inputArray = val;
+    this.inputLength = val.length;
   }
   
   this.checkEntry = function(entry, word) {
@@ -689,10 +690,33 @@ function BibTeXSearcher() {
     var string = input.val();
     if(string.length) {
       var splitInput = string.split(" ");
-      this.unhideAll();
-      for(var word in splitInput) {
-        this.hideEntry(splitInput[word]);
+      var needToRestart = false;
+      //If input is less than restart
+      if(this.inputLength>splitInput.length){
+      	needToRestart = true;
+      } 
+      //If last string reduced in size than restart
+      else if(this.inputArray[this.inputArray.length-1].length > 
+      	         splitInput[splitInput.length-1].length) {
+      	needToRestart = true;
+      } 
+      //If earlier words changed than restart
+      else {
+        for(var i=0; i<this.inputArray.length-1; i++){
+      	  if(this.inputArray[i]!=splitInput[i]) {
+      	    needToRestart = true; break;
+      	  }
+        }
       }
+      if(needToRestart) {
+      	this.unhideAll();
+      	for(var word in splitInput) {
+          this.hideEntry(splitInput[word]);
+        }
+      } else {
+      	this.hideEntry(splitInput[splitInput.length-1]);
+      }
+      this.setInputArray(splitInput);
     } else {
       this.unhideAll();
     }
