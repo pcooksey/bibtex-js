@@ -1,6 +1,7 @@
 /* 
 * Author = Philip Cooksey
 * Edited = July 2015
+* Website = https://github.com/pcooksey/bibtex-js
 * Credit = Henrik Mühe
 *
 * Issues:
