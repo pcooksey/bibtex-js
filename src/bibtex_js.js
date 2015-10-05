@@ -795,12 +795,17 @@ function authorList(object)
   var map = new Object();
   $("span.author").each(function(i, obj) {
   	arrayString = $(this).text().split(new RegExp(",[\\s]+and[\\s]+|,[\\s]+"));
-  	for (i = 0; i < arrayString.length; i++) {
-  	  if(arrayString[i] in map) {
-  		map[arrayString[i]] += 1;
-  	  } else {
-  		map[arrayString[i]] = 1;
-  	  }
+  	if(object.attr("extra")=="first"){
+  		map[arrayString[0]] = 1;
+  		console.log("here");
+  	} else {
+	  	for (i = 0; i < arrayString.length; i++) {
+	  	  if(arrayString[i] in map) {
+	  		map[arrayString[i]] += 1;
+	  	  } else {
+	  		map[arrayString[i]] = 1;
+	  	  }
+	  	}
   	}
   });
   
