@@ -352,6 +352,8 @@ function BibtexDisplay() {
   }
   
   this.displayAuthor = function(string){
+  	string = string.replace(/[ ]*[\n\t][ ]*/g, " ");
+  	string = string.replace(/[ ]+/g, " ");
   	var arrayString = string.split(new RegExp("[\\s]+and[\\s]+"));
   	var newString = arrayString[0];
   	for (i = 1; i < arrayString.length; i++) {
