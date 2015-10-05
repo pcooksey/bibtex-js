@@ -795,7 +795,7 @@ function authorList(object)
   var map = new Object();
   $("span.author").each(function(i, obj) {
   	arrayString = $(this).text().split(new RegExp(",[\\s]+and[\\s]+|,[\\s]+"));
-  	for (i = 1; i < arrayString.length; i++) {
+  	for (i = 0; i < arrayString.length; i++) {
   	  if(arrayString[i] in map) {
   		map[arrayString[i]] += 1;
   	  } else {
@@ -805,17 +805,20 @@ function authorList(object)
   });
   
   var tuples = [];
-  for (var key in map) tuples.push([key, map[key]]);
+  for (var key in map) tuples.push([key, key.split(" ").pop().toLowerCase()]);
+  //for (var key in map) tuples.push([key, map[key]]);
 
   tuples.sort(function(a, b) {
     a = a[1]; b = b[1];
     return a < b ? -1 : (a > b ? 1 : 0);
   });
 
-  for (var i = tuples.length-1; i >= 0; i--) {
+  for (var i = 0; i < tuples.length; i++) {
     var key = tuples[i][0];
     var value = tuples[i][1];
-	object.append($("<option></option>").attr("value",key).text(key));
+    var array = key.split(" ");
+    var text = array.pop()+", "+array.join(" ");
+	object.append($("<option></option>").attr("value",key).text(text));
   }
 }
 
