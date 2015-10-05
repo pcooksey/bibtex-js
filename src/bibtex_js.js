@@ -1,4 +1,4 @@
-/* 
+﻿/* 
 * Author = Philip Cooksey
 * Edited = July 2015
 * Website = https://github.com/pcooksey/bibtex-js
@@ -694,9 +694,9 @@ function BibTeXSearcher() {
   }
   
   this.searcher = function(input) {
-    var string = input.val();
+    var string = input;
     if(string.length) {
-      var splitInput = string.split(" ");
+      var splitInput = string.split("%");
       var needToRestart = false;
       //If input is less than restart
       if(this.inputLength>splitInput.length || this.inputLength==0){
@@ -742,15 +742,78 @@ function createWebPage(defaultTemplate) {
 }
 
 function loadExtras()
+{ 
+  BibTeXSearcherClass = new BibTeXSearcher();
+  $(".bibtex_author").each(function(i, obj) {
+  	authorList($(this));
+  });
+  
+  localStorage.removeItem("customerDatabase");
+  
+  if(!localStorage.searcher) {
+  	localStorage.searcher = new Object();
+  }
+  
+  //Resets selects when back button is used
+  $("select").each(function () {
+  	if(localStorage.getItem($(this).attr("id"))) {
+  	  $(this).val(JSON.parse(localStorage.getItem($(this).attr("id"))));
+   } 
+  });
+  
+  $(".bibtex_search").each(function(i, obj) {
+  	$(this).on('change', function(e) { 
+  		combineSearcher(BibTeXSearcherClass);
+  		localStorage.setItem($(this).attr("id"), JSON.stringify($(this).val()));
+  	});
+  	$(this).keyup(function() { 
+  		combineSearcher(BibTeXSearcherClass);
+  	});
+  	if($(this).val()!=""){
+  		combineSearcher(BibTeXSearcherClass);
+  	}
+  });
+	  
+}
+
+function combineSearcher(searcherClass)
 {
-  // Checking for extra features
-  var input = $("input.bibtex_search");
-  if(input.length) {
-    BibTeXSearcherClass = new BibTeXSearcher();
-    input.keyup(function() { BibTeXSearcherClass.searcher(input); });
-    if(input.val()!="") {
-  	  BibTeXSearcherClass.searcher(input);
-    }
+  var string = "";
+  $("select.bibtex_search").each(function(i, obj) {
+  	string += "%" + $(this).val();
+  });
+  $("input.bibtex_search").each(function(i, obj) {
+  	string += "%" + $(this).val().split(' ').join('%');
+  });
+  searcherClass.searcher(string);
+}
+
+function authorList(object)
+{
+  var map = new Object();
+  $("span.author").each(function(i, obj) {
+  	arrayString = $(this).text().split(new RegExp(",[\\s]+and[\\s]+|,[\\s]+"));
+  	for (i = 1; i < arrayString.length; i++) {
+  	  if(arrayString[i] in map) {
+  		map[arrayString[i]] += 1;
+  	  } else {
+  		map[arrayString[i]] = 1;
+  	  }
+  	}
+  });
+  
+  var tuples = [];
+  for (var key in map) tuples.push([key, map[key]]);
+
+  tuples.sort(function(a, b) {
+    a = a[1]; b = b[1];
+    return a < b ? -1 : (a > b ? 1 : 0);
+  });
+
+  for (var i = tuples.length-1; i >= 0; i--) {
+    var key = tuples[i][0];
+    var value = tuples[i][1];
+	object.append($("<option></option>").attr("value",key).text(key));
   }
 }
 
