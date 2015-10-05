@@ -797,7 +797,6 @@ function authorList(object)
   	arrayString = $(this).text().split(new RegExp(",[\\s]+and[\\s]+|,[\\s]+"));
   	if(object.attr("extra")=="first"){
   		map[arrayString[0]] = 1;
-  		console.log("here");
   	} else {
 	  	for (i = 0; i < arrayString.length; i++) {
 	  	  if(arrayString[i] in map) {
