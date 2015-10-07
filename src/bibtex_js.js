@@ -641,16 +641,56 @@ function BibTeXSearcher() {
     this.inputLength = val.length;
   }
   
+  this.getStringName = function(string) {
+  	var start_pos = string.indexOf('@') + 1;
+	var end_pos = string.indexOf('[',start_pos);
+	var array = [];
+	if(end_pos==-1) {
+	  array[0] = string.substring(start_pos,string.length);
+	} else {
+	  array[0] = string.substring(start_pos,end_pos);
+	  end_pos2 = string.indexOf(']',start_pos);
+	  array[1] = string.substring(end_pos+1,end_pos2);
+	}
+  	return array;
+  }
+  
   this.checkEntry = function(entry, word) {
     var found = false;
-    entry.find("span:not(.noread)").each( 
-      function() {
-        if($(this).text().search(new RegExp(word, "i")) > -1
+    if(word[0]!="@"){
+      entry.find("span:not(.noread)").each( 
+        function() {
+          if($(this).text().search(new RegExp(word, "i")) > -1
            && entry.is(":visible")) {
-          found = true;
-          return false; //Break out of loop
-        }
-      });
+            found = true; return false; //Break out of loop
+          }
+        });
+    } else {
+      //This search version is for more specific searchs using the @name[parameter]=value
+      var strings = word.split("=");
+	  var arrayStr = this.getStringName(strings[0]);
+	  if(arrayStr.length<2) {
+        entry.find("span:not(.noread)."+arrayStr[0]).each( 
+          function() {
+            if($(this).text().search(new RegExp(strings[1], "i")) > -1
+             && entry.is(":visible")) {
+              found = true; return false; //Break out of loop
+            }
+          });
+      } else {
+      	switch(arrayStr[1]){
+      		case "first":
+      			entry.find("span:not(.noread)."+arrayStr[0]).each( 
+                  function() {
+                  	arrayString = $(this).text().split(new RegExp(",[\\s]+and[\\s]+|,[\\s]+"));
+                    if(strings[1] == arrayString[0] && entry.is(":visible")) {
+                      found = true; return false; //Break out of loop
+                  }
+                });
+      		break;
+      	}
+      }
+    }
     return found;
   }
   
@@ -695,11 +735,11 @@ function BibTeXSearcher() {
     }
   }
   
-  this.searcher = function(input) {
+  this.searcher = function(input, needToRestart) {
+  	needToRestart = typeof needToRestart !== 'undefined' ? needToRestart : false;
     var string = input;
     if(string.length) {
       var splitInput = string.split("%");
-      var needToRestart = false;
       //If input is less than restart
       if(this.inputLength>splitInput.length || this.inputLength==0){
       	needToRestart = true;
@@ -765,29 +805,44 @@ function loadExtras()
   
   $(".bibtex_search").each(function(i, obj) {
   	$(this).on('change', function(e) { 
-  		combineSearcher(BibTeXSearcherClass);
+  		combineSearcher(BibTeXSearcherClass, true);
   		localStorage.setItem($(this).attr("id"), JSON.stringify($(this).val()));
   	});
   	$(this).keyup(function() { 
   		combineSearcher(BibTeXSearcherClass);
   	});
   	if($(this).val()!=""){
-  		combineSearcher(BibTeXSearcherClass);
+  		combineSearcher(BibTeXSearcherClass, true);
   	}
   });
 	  
 }
 
-function combineSearcher(searcherClass)
+function combineSearcher(searcherClass, needToRestart)
 {
+  needToRestart = typeof needToRestart !== 'undefined' ? needToRestart : false;
   var string = "";
   $("select.bibtex_search").each(function(i, obj) {
-  	string += "%" + $(this).val();
+  	var front ="";
+  	if(obj.hasAttribute("search")) 
+  	  front = "@"+$(this).attr("search");
+  	if(obj.hasAttribute("extra")) {
+  	  front += "["+$(this).attr("extra")+"]=";
+  	} else {
+  	  if(front!="") {
+  	  	front += "=";
+  	  }
+  	}
+  	if($(this).val()!="") {
+  	  string += "%" +front+$(this).val();
+  	}
   });
   $("input.bibtex_search").each(function(i, obj) {
-  	string += "%" + $(this).val().split(' ').join('%');
+  	if($(this).val()!="") {
+  	  string += "%" + $(this).val().split(' ').join('%');
+  	}
   });
-  searcherClass.searcher(string);
+  searcherClass.searcher(string, needToRestart);
 }
 
 function authorList(object)
@@ -810,7 +865,6 @@ function authorList(object)
   
   var tuples = [];
   for (var key in map) tuples.push([key, key.split(" ").pop().toLowerCase()]);
-  //for (var key in map) tuples.push([key, map[key]]);
 
   tuples.sort(function(a, b) {
     a = a[1]; b = b[1];
