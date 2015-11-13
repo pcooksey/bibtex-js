@@ -567,9 +567,12 @@ function BibtexDisplay() {
       // iterate over bibTeX entries and add them to template
       for (var entryKey in entries) {
         var entry = entries[entryKey];
-        var tpl = this.createTemplate(entry);
-        structure.find(".templates").append(tpl);
-        tpl.show();
+        // Checking if web is set to visible
+        if(!entry["WEB"] || entry["WEB"].toUpperCase()!="NO") {
+	        var tpl = this.createTemplate(entry);
+	        structure.find(".templates").append(tpl);
+	        tpl.show();
+       	}
       }
       return structure;
     }
