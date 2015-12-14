@@ -1,4 +1,7 @@
+# Customize publications
 The default style for each entry can be specified explicitly using the below template system in you html code.
+
+## BibTex template
 
 BibTeX template defines what each entry will look like when printed.
 ```html
@@ -29,7 +32,7 @@ Demo BibTeX template example:
   </div>
 </div>
 ```
-
+## BibTex Structure
 BibTeX structure allows for sorting and grouping of entries placed into the templates div (increases run time).
 ```html
 <div class="bibtex_structure">
@@ -55,4 +58,4 @@ Demo BibTeX structure example:
 </div>
 ```
 
-For the more information on the additional capabilities check out the [extras](extra.md).
+For more information on the additional capabilities check out the [extras](extra.md).
