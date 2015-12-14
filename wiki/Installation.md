@@ -1,4 +1,4 @@
-# Installing BibTex_js
+# Installing ![BibTeX-js](wiki/logo.png)
 
 Load javascript, add this to your html code:
 
@@ -32,4 +32,4 @@ That's it!
 
 Customize how publications are displayed using [styles](styles.md).
 
-Searching entries, hidding entries, more bibtex variables, and other extra functionality [extras](extra.md).
+Searching entries, hidding entries, more bibtex variables, and more with [extra functionality](extra.md).

@@ -9,7 +9,7 @@ If there is a bibtex entry value that should not be searched then add the class 
 <span class="bibtexraw noread"></span>
 ```
 
-We define a search field with the class `bibtex_search`. Add options with values to be searched. The values are interpreted using regular expressions i.e., `Multi-robot|multirobot|soccer` finds the OR of the three strings. This is the only way to find the combination rather than intersection of bibtex entries.
+We define a search field with the class `bibtex_search`. Add options with values to be searched. The values are interpreted using regular expressions i.e., `Multi-robot|multirobot|soccer` finds the OR of the three strings. Regular expresssions is the only way to find the combination of bibtex entries rather than their intersection.
 ```html
 <select class="bibtex_search">
   <option value="">Search Topic</option>
@@ -20,14 +20,14 @@ We define a search field with the class `bibtex_search`. Add options with values
 </select>
 ```
 
-Adding the class `bibtex_author` will generate the author list within the select tags. The `extra` attribute defines that it will only be the first authors (can be removed for all authors). The `search` attribute defines that this select will only search the bibtex field `author` (resulting in a quicker search). The search can be changed to any field in the bibtex entries.
+Adding the class `bibtex_author` will generate the author list within the select tags. The `extra` attribute defines that it will only be the first authors (can be removed for all authors). The `search` attribute defines that this value will only check the bibtex field `author` (results in a quicker search). The `search` can be changed to any field in the bibtex entries.
 ```html
 <select class="bibtex_search bibtex_author" extra="first" search="author">
   <option value="">Search First Author</option>
 </select>
 ```
 
-Adding the `bibtex_search` class to an input allows the user to search anything. The values are split up by spaces and then each is interpreted by regular expressions.
+Adding the `bibtex_search` class to an input tag allows the user to search anything. The values are split up by spaces and then each is interpreted as a regular expressions.
 ```html
 <input type="text" class="bibtex_search" id="searchbar" placeholder="Search publications">
 ```
@@ -56,11 +56,11 @@ The cases for needing a variable are rare but the bibtexkey provides a unique id
 
 ## Additional bibtex fields
 
-`BIBTEXKEY` = the bibtex entry key
+`BIBTEXKEY` The bibtex entry key.
 
-`BIBTEXRAW` = the bibtex raw format
+`BIBTEXRAW` The bibtex raw format.
 
-`BIBTEXTYPE` =
+`BIBTEXTYPE`
 ```
 if (@INCOLLECTION") {
   ["BIBTEXTYPE"] = "book chapter";
@@ -73,4 +73,4 @@ if (@INCOLLECTION") {
 }   
 ```
 
-`WEB` = if set to *no* then it will not be displayed
+`WEB` Set to **no** then it will not be displayed (if it doesn't exist or yes then it will be displayed).
