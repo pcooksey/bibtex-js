@@ -5,7 +5,7 @@ Load javascript, add this to your html code:
 <script type="text/javascript" src="https://raw.githubusercontent.com/pcooksey/bibtex-js/master/src/bibtex_js.js"></script>
 ```
 
-Place BibTeX link into `<bibtex>` or put bibtex text into a (hidden) textarea:
+Place BibTeX link into `<bibtex>` tag or insert bibtex text into a (hidden) textarea with `bibtex_input` in the class:
 
 ```html
 <bibtex src="test.bib"></bibtex>
@@ -18,10 +18,13 @@ Place BibTeX link into `<bibtex>` or put bibtex text into a (hidden) textarea:
 </textarea>
 ```
 
-Output will be displayed in the element with id "bibtex-display", add this to HTML:
+Output will be displayed in the element with id "bibtex_display", add this to HTML:
 
 ```html
 <div id="bibtex_display"></div>
 ```
 
-That's it. Customize how publications are displayed using [styles](styles.md).
+That's it! 
+~~ Unless you want to get fancy ~~ 
+Customize how publications are displayed using [styles](styles.md).
+Advanced search and extra funcationality [extras](extra.md).
