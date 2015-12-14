@@ -55,4 +55,4 @@ Demo BibTeX structure example:
 </div>
 ```
 
-For the more information on the additional capabilities [Extras](extra.md).
+For the more information on the additional capabilities check out the [extras](extra.md).
