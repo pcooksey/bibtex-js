@@ -1,3 +1,5 @@
+# Installing BibTex_js
+
 Load javascript, add this to your html code:
 
 ```html
@@ -25,6 +27,9 @@ Output will be displayed in the element with id "bibtex_display", add this to HT
 ```
 
 That's it! 
-~~ Unless you want to get fancy ~~ 
+
+### Unless you want to get fancy 
+
 Customize how publications are displayed using [styles](styles.md).
-Advanced search and extra funcationality [extras](extra.md).
+
+Searching entries, hidding entries, more bibtex variables, and other extra functionality [extras](extra.md).

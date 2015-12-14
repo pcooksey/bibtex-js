@@ -6,7 +6,7 @@ BibTeX template defines what each entry will look like when printed.
   </div>
 ```
 
-Check if an entry value (year) exist before printing the value in the inner span (hidden otherwise). Also check if an entry value doesn't exist before printing the value. This is a simple way of having an if else statement in the bibtex_template.
+Check if an entry value `year` exist before printing the value in the inner span (hidden otherwise). Also check if an entry value doesn't exist `!year` before printing. This is a simple way of having an `if else` statement in the bibtex_template.
 ```html
 <span class="if year"><span class="year"></span>,</span>
 <span class="if !year">Missing the year,</span>
