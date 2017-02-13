@@ -4,7 +4,7 @@ Load javascript, add this to your html code (the source bibtex file may not be u
 
 ```html
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
-<script type="text/javascript" src="https://raw.githubusercontent.com/pcooksey/bibtex-js/b81606e85986fa8ad0eb66954493bc1c0b3d7ab1/src/bibtex_js.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/pcooksey/bibtex-js/b81606e85986fa8ad0eb66954493bc1c0b3d7ab1/src/bibtex_js.js"></script>
 ```
 
 Place BibTeX link into `<bibtex>` tag or insert bibtex text into a (hidden) textarea with `bibtex_input` in the class:
