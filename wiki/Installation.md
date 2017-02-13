@@ -1,6 +1,6 @@
 # Installing ![BibTeX-js](logo.png)
 
-Load javascript, add this to your html code (the source bibtex file may not be update):
+Load javascript, add this to your html code (the source bibtex file may not be the most recent):
 
 ```html
 <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js"></script>
