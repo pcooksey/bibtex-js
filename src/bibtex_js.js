@@ -883,6 +883,16 @@ function authorList(object)
   }
 }
 
+var defaultTemplate = "<div class=\"bibtex_template\">"+
+                        "<div class=\"if author\" style=\"font-weight: bold;\">\n"+
+                        "<span class=\"if year\">\n"+
+                        "<span class=\"year\"></span>,\n"+
+                        "</span>\n  <span class=\"author\"></span>\n"+
+                        "<span class=\"if url\" style=\"margin-left: 20px\">\n"+
+                        "<a class=\"url\" style=\"color:black; font-size:10px\">(view online)</a>\n"+
+                        "</span>\n</div>\n<div style=\"margin-left: 10px; margin-bottom:5px;\">\n"+
+                        "<span class=\"title\"></span>\n</div></div>";
+
 // check whether or not jquery is present
 if (!window.jQuery) {
   //Add jquery to the webpage
@@ -898,15 +908,7 @@ if (!window.jQuery) {
           window.setTimeout(function() { checkReady(callback); }, 100);
       }
   };
-  var defaultTemplate = "<div class=\"bibtex_template\">"+
-                        "<div class=\"if author\" style=\"font-weight: bold;\">\n"+
-                        "<span class=\"if year\">\n"+
-                        "<span class=\"year\"></span>,\n"+
-                        "</span>\n  <span class=\"author\"></span>\n"+
-                        "<span class=\"if url\" style=\"margin-left: 20px\">\n"+
-                        "<a class=\"url\" style=\"color:black; font-size:10px\">(view online)</a>\n"+
-                        "</span>\n</div>\n<div style=\"margin-left: 10px; margin-bottom:5px;\">\n"+
-                        "<span class=\"title\"></span>\n</div></div>";
+  
   // Start polling...
   checkReady(function($){createWebPage(defaultTemplate);});
 } else {
