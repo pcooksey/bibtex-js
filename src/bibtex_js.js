@@ -423,14 +423,17 @@ function BibtexDisplay() {
       if(key=="BIBTEXRAW") {
         tpl.find("." + key.toLowerCase()).html(value);
       } else if(key=="AUTHOR") {
-      	tpl.find("span:not(a)." + key.toLowerCase()).html(this.displayAuthor(this.fixValue(value)));
+        tpl.find("span:not(a)." + key.toLowerCase()).html(this.displayAuthor(this.fixValue(value)));
+      } else if(key=="PAGES") {
+        value = value.replace("--", "-")
+        tpl.find("." + key.toLowerCase()).html(value);
       } else {
         tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
         var link = tpl.find("a." + key.toLowerCase()).each(function() {
 	        if(this.attributes["href"] == "") {
-			  this.attributes["href"].value = this.fixValue(value);
-			}
-		});
+			      this.attributes["href"].value = this.fixValue(value);
+			    }
+		    });
       }
     }
     tpl.addClass("bibtexentry");
