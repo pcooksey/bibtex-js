@@ -672,17 +672,43 @@ function BibTeXSearcher() {
           }
         });
     } else {
-      //This search version is for more specific searchs using the @name[parameter]=value
-      var strings = word.split("=");
-	  var arrayStr = this.getStringName(strings[0]);
-	  if(arrayStr.length<2) {
-        entry.find("span:not(.noread)."+arrayStr[0]).each( 
-          function() {
-            if($(this).text().search(new RegExp(strings[1], "i")) > -1
-             && entry.is(":visible")) {
-              found = true; return false; //Break out of loop
-            }
-          });
+	//This search version is for more specific searchs using the @name[parameter]=value
+	var strings = word.split("=");
+	var arrayStr = this.getStringName(strings[0]);
+	if(arrayStr.length<2) {
+	    switch(arrayStr[0].toLowerCase())
+	    {
+		case "topic":
+		{
+		    var count = 0;
+		    entry.find("span:not(.noread)."+arrayStr[0]).each( 
+			function() {
+			    count += 1;
+                            if ($(this).text().search(new RegExp(strings[1], "i")) > -1
+                                && entry.is(":visible")) {
+				found = true; return false; //Break out of loop
+			    }
+			});
+		    if ( count == 0 ) {
+			entry.find("span:not(.noread)").each( 
+			    function() {
+				if($(this).text().search(new RegExp(strings[1], "i")) > -1
+				   && entry.is(":visible")) {
+				    found = true; return false; //Break out of loop
+				}
+			    });
+		    }
+		}
+		break;
+		default:
+		entry.find("span:not(.noread)."+arrayStr[0]).each( 
+		    function() {
+			if($(this).text().search(new RegExp(strings[1], "i")) > -1
+			   && entry.is(":visible")) {
+			    found = true; return false; //Break out of loop
+			}
+		    });
+	    }
       } else {
       	switch(arrayStr[1]){
       		case "first":
