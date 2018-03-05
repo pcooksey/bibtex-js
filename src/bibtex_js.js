@@ -595,6 +595,8 @@ function BibtexDisplay() {
                 //Add the header for the group
                 newStruct.children("." + sectionbibtexkey.toLowerCase()).first().prepend("<h" + (level + 1) + " class='" + groupName + "' id=\"" + sectionNameValue + "\">" + sectionNameTitle + "</h" + (level + 1) + ">");
 
+                newStruct.attr("id", sectionNameTitle.toLowerCase());
+
                 //Divide the array into group with sectionNameValue
                 splicedArray = $.grep(entries, function(object, i) {
                     return re.test(object[sectionbibtexkey]);
