@@ -696,13 +696,20 @@ function bibtex_js_draw() {
     } else {
         //Gets the BibTex files and adds them together
         var bibstring = "";
+        var requests = [];
+        // Create request for bibtex files
         $('bibtex').each(function(index, value) {
-            $.get($(this).attr('src'), function(data) {
-                bibstring += data;
-            });
+            var request = $.ajax({
+                    url: $(this).attr('src'),
+                    dataType: "text"
+                })
+                .done((data) => bibstring += data)
+                .fail((request, status, error) => console.error(error))
+            requests.push(request);
         });
+
         // Executed on completion of last outstanding ajax call
-        $(document).ajaxStop(function() {
+        $.when.apply($, requests).then(function() {
             (new BibtexDisplay()).displayBibtex(bibstring, $("#bibtex_display"));
             loadExtras();
         });
