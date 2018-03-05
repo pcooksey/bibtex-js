@@ -380,7 +380,7 @@ function BibtexDisplay() {
         do {
             // find next if
             var conds = tpl.find(".if");
-            if (conds.size() == 0) {
+            if (conds.length == 0) {
                 break;
             }
 
@@ -867,7 +867,7 @@ function createWebPage(defaultTemplate) {
     // draw bibtex when loaded
     $(document).ready(function() {
         // check for template, add default
-        if ($(".bibtex_template").size() == 0) {
+        if ($(".bibtex_template").length == 0) {
             $("body").append(defaultTemplate);
         }
         bibtex_js_draw();
@@ -984,7 +984,7 @@ if (!window.jQuery) {
     //Add jquery to the webpage
     var jq = document.createElement('script');
     jq.type = 'text/javascript';
-    jq.src = 'http://ajax.googleapis.com/ajax/libs/jquery/1.4.2/jquery.min.js';
+    jq.src = 'http://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js';
     document.getElementsByTagName('head')[0].appendChild(jq);
     // Poll for jQuery to come into existance
     var checkReady = function(callback) {
