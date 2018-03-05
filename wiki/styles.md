@@ -58,4 +58,18 @@ Demo BibTeX structure example:
 </div>
 ```
 
+Custom sections for grouping your bibtex file by their type `sections bibtextypekey`. Define as many `section` divs with their respective types (`@article`). Then create a title for each section. You can also use the `|` to include multiple types for that section. Example demonstrates how to add custome sections to your page.
+```html
+<div class="bibtex_structure">
+  <div class="sections bibtextypekey">
+      <div class="section @article" title="Refereed Articles"></div>
+      <div class="section @book" title="Books"></div>
+      <div class="section @inproceedings" title="Conference and Workshop Papers"></div>
+      <div class="section @misc|@phdthesis|@mastersthesis|@bachelorsthesis|@techreport" title="Other Publications"></div>
+      <div class="templates"></div>
+  </div>
+</div>
+```
+
+
 For more information on the additional capabilities check out the [extras](extra.md).

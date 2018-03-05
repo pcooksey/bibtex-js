@@ -56,11 +56,11 @@ The cases for needing a variable are rare but the bibtexkey provides a unique id
 
 ## Additional bibtex fields
 
-`BIBTEXKEY` The bibtex entry key.
+`bibtexkey` The bibtex entry key.
 
-`BIBTEXRAW` The bibtex raw format.
+`bibtexraw` The bibtex raw format.
 
-`BIBTEXTYPE`
+`bibtextype`
 ```
 if (@INCOLLECTION") {
   ["BIBTEXTYPE"] = "book chapter";
@@ -72,5 +72,7 @@ if (@INCOLLECTION") {
   ["BIBTEXTYPE"] = "technical report";
 }   
 ```
+
+`bibtextypekey` This is the bibtex type key, e.g., @article
 
 `WEB` Set to **no** then it will not be displayed (if it doesn't exist or yes then it will be displayed).
