@@ -418,21 +418,29 @@ function BibtexDisplay() {
         for (var index in keys) {
             var key = keys[index];
             var value = entry[key] || "";
+
+            // Fill out bibtex raw and continue
             if (key == "BIBTEXRAW") {
                 tpl.find("." + key.toLowerCase()).html(value);
-            } else if (key == "AUTHOR") {
-                tpl.find("span:not(a)." + key.toLowerCase()).html(this.displayAuthor(this.fixValue(value)));
-            } else if (key == "PAGES") {
-                value = value.replace("--", "-")
-                tpl.find("." + key.toLowerCase()).html(value);
-            } else {
-                tpl.find("span:not(a)." + key.toLowerCase()).html(this.fixValue(value));
-                var link = tpl.find("a." + key.toLowerCase()).each(function() {
-                    if (this.attributes["href"] == "") {
-                        this.attributes["href"].value = this.fixValue(value);
-                    }
-                });
+                continue;
             }
+
+            if (key == "AUTHOR") {
+                value = this.displayAuthor(this.fixValue(value));
+            } else if (key == "PAGES") {
+                value = value.replace("--", "-");
+            } else if (key == "DATE") {
+                value = moment(value).format("MMM. YYYY");
+            } else {
+                value = this.fixValue(value);
+            }
+
+            tpl.find("span:not(a)." + key.toLowerCase()).html(value);
+            tpl.find("a." + key.toLowerCase()).each(function() {
+                if (!$(this).attr("href")) {
+                    $(this).attr("href", value);
+                }
+            });
         }
         tpl.addClass("bibtexentry");
         return tpl;
@@ -474,6 +482,9 @@ function BibtexDisplay() {
                     break;
                 case "number":
                     return parseInt(aValue) - parseInt(bValue);
+                    break;
+                case "date":
+                    return new Date(bValue) - new Date(aValue);
                     break;
                 default:
                     return 0;
