@@ -432,6 +432,9 @@ function BibtexDisplay() {
                 value = value.replace("--", "-");
             } else if (key == "DATE") {
                 value = moment(value).format("MMM. YYYY");
+            } else if (key == "URL") {
+                value = value.replace(/\\url/g, '');
+                value = this.fixValue(value);
             } else {
                 value = this.fixValue(value);
             }
