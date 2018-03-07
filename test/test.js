@@ -3,7 +3,7 @@ import {
 } from 'testcafe';
 
 fixture `Simple Tests`
-    .page `http://0.0.0.0:8000/test/html/simple.html`;
+    .page `http://localhost:8000/test/html/simple.html`;
 
 test('Check Entries', async t => {
     const entry0 = await Selector('.bibtexentry');
@@ -93,7 +93,7 @@ test('Check URL links', async t => {
 
 
 fixture `Sort Test`
-    .page `http://0.0.0.0:8000/test/html/sort.html`;
+    .page `http://localhost:8000/test/html/sort.html`;
 
 test('Check Sort ASC String', async t => {
     const entries = Selector('#bibtex_display').find('.bibtexentry');
@@ -111,7 +111,7 @@ test('Check Sort ASC String', async t => {
 
 
 fixture `Group Test`
-    .page `http://0.0.0.0:8000/test/html/group.html`;
+    .page `http://localhost:8000/test/html/group.html`;
 
 test('Check Group ASC String', async t => {
     const entries = Selector('#bibtex_display').find('.bibtexentry');

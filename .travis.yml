@@ -20,3 +20,5 @@ before_script:
   - "sh -e /etc/init.d/xvfb start"
   - sleep 3
   - fluxbox >/dev/null 2>&1 &
+  - python -m SimpleHTTPServer &
+  - sleep 2
