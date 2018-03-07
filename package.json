@@ -1,0 +1,8 @@
+{
+    "name": "Running-tests-using-travis-ci",
+    "version": "1.0.0",
+    "description": "Using TestCafe tests in the cloud using Firefox and Chrome with Travis CI.",
+    "scripts": {
+	"test":  "testcafe chrome,firefox tests/test.js"
+    }
+}
