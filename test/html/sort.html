@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>
+      Bibtex-js Demo
+    </title>
+
+    <script src="../../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    <bibtex src="testing.bib"></bibtex>
+
+    <style>
+      bibtex { display: none; }
+      #bibtex_errors { margin-top:10px; color: red;}
+    </style>
+  </head>
+  <body>
+
+    <!-- This file is for testing the most simple use case of bibtex_js -->
+
+    <div id="bibtex_errors"></div>
+    <h1> Rendered Publications</h1>
+
+    <div class="bibtex_topics"></div>
+
+    <div class="bibtex_structure">
+      <div class="sort year" extra="ASC number">
+          <div class="templates">
+	  </div>
+      </div>
+    </div>
+
+    <div class="bibtex_template">
+      <div class="if author" style="font-weight: bold;">
+	<span class="if year">
+	  <span class="year"></span>
+	</span> <span class="author"></span>
+	<span class="if url" style="margin-left: 20px">
+	  <a class="url" style="color:black; font-size:10px">(view online)</a>
+	</span>
+      </div>
+      <div style="margin-left: 10px; margin-bottom:5px;">
+	<span class="title">
+	</span>
+      </div>
+    </div>
+
+    <div id="bibtex_display"></div>
+
+  </body>
+</html>
