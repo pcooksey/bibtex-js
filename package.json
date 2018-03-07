@@ -3,7 +3,7 @@
     "version": "1.0.0",
     "description": "Using TestCafe tests in the cloud using Firefox and Chrome with Travis CI.",
     "scripts": {
-	"test":  "testcafe chrome,firefox tests/test.js"
+	"test":  "testcafe chrome,firefox test/test.js"
     },
     "devDependencies": {
 	"testcafe": "*"
