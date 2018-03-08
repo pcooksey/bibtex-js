@@ -413,7 +413,7 @@ function BibtexDisplay() {
         } while (true);
 
         tpl.find('.bibtexVar').each(function() {
-            var key = $(this).attr["extra"].toUpperCase();
+            var key = $(this).attr("extra").toUpperCase();
             var regEx = new RegExp('\\+' + key + '\\+', "gi");
             $.each(this.attributes, function(i, attrib) {
                 var value = attrib.value;

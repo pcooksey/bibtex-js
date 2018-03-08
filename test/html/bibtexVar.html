@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>
+      Bibtex-js Demo
+    </title>
+
+    <script src="../../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    <bibtex src="testing.bib"></bibtex>
+
+    <style>
+      bibtex { display: none; }
+      #bibtex_errors { margin-top:10px; color: red;}
+    </style>
+  </head>
+  <body>
+
+    <!-- This file is for testing the accessing bibtexVar of bibtex_js -->
+
+    <div id="bibtex_errors"></div>
+    <h1> Rendered Publications</h1>
+    <h2> Testing bibtexVar so some values are in the attributes of the
+    bibtex_template so they are not displayed </h2>
+    <div class="bibtex_topics"></div>
+
+    <div class="bibtex_template">
+      <div class="if author" style="font-weight: bold;">
+	<span class="if year">
+	  <span class="bibtexVar" year="+year+" extra="year"></span>
+	</span> <span class="bibtexVar" author="+author+" extra="author"></span>
+	<span class="if url" style="margin-left: 20px">
+	  <a class="bibtexVar" href="+url+" style="color:black; font-size:10px" extra="url">(view online)</a>
+	</span>
+      </div>
+      <div style="margin-left: 10px; margin-bottom:5px;">
+	<span class="title">
+	</span>
+      </div>
+    </div>
+
+    <div id="bibtex_display"></div>
+
+  </body>
+</html>

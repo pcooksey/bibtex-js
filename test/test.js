@@ -199,3 +199,30 @@ test('Check academic style', async t => {
         await t.expect(stringNode.count).eql(count[i]);
     }
 })
+
+fixture `BibTexVar replacement test`
+    .page `http://localhost:8000/test/html/bibtexVar.html`
+
+test('Check class=bibtexVar', async t => {
+    const entries = Selector('#bibtex_display').find('.bibtexentry');
+    const entriesCount = Selector('#bibtex_display').find('.bibtexentry').count;
+    await t
+        .expect(entries).ok()
+        .expect(entriesCount).eql(5);
+
+    var years = ["2003", "1998", "1995", "2003", "2007"];
+    var authors = ["Sammet, J.E. and Hemmendinger, D.",
+        "Bauer, B. and Höllerer, R.",
+        "Parr, T.J. and Quong, R.W.",
+        "Wikipedia",
+        "Terence Parr"
+    ];
+
+    for (var i = 1; i < 5; i++) {
+        const entry = entries.nth(i);
+        await t
+            .expect(await entry.find('.bibtexVar').withAttribute('year', years[i]).count).eql(1)
+            .expect(await entry.find('.bibtexVar').withAttribute('author', authors[i]).count).eql(1);
+    }
+
+})
