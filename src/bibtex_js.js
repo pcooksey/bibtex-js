@@ -365,7 +365,14 @@ function BibtexDisplay() {
         return newString;
     }
 
-    this.createTemplate = function(entry) {
+    this.createTemplate = function(entry, output) {
+        // Check if bibtex keys are limiting output (bibtexkeys="key1|key2|...|keyN")
+        if (output[0].hasAttribute("bibtexkeys")) {
+            var bitexkeys = output[0].getAttribute("bibtexkeys");
+            if (!entry["BIBTEXKEY"].match(bitexkeys))
+                return null;
+        }
+
         // find template
         var tpl = $(".bibtex_template").clone().removeClass('bibtex_template');
 
@@ -649,9 +656,12 @@ function BibtexDisplay() {
                 var entry = entries[entryKey];
                 // Checking if web is set to visible
                 if (!entry["WEB"] || entry["WEB"].toUpperCase() != "NO") {
-                    var tpl = this.createTemplate(entry);
-                    structure.find(".templates").append(tpl);
-                    tpl.show();
+                    var tpl = this.createTemplate(entry, output);
+                    // Check if template was created
+                    if (tpl) {
+                        structure.find(".templates").append(tpl);
+                        tpl.show();
+                    }
                 }
             }
             return structure;
@@ -674,16 +684,17 @@ function BibtexDisplay() {
             // Create array for sorting
             var entriesArray = this.createArray(entries);
             this.createStructure(structure, output, entriesArray);
-            $(".bibtex_structure").remove();
         } else {
             // iterate over bibTeX entries
             for (var entryKey in entries) {
                 var entry = entries[entryKey];
 
-                tpl = this.createTemplate(entry);
-
-                output.append(tpl);
-                tpl.show();
+                tpl = this.createTemplate(entry, output);
+                // Check if template was created
+                if (tpl) {
+                    output.append(tpl);
+                    tpl.show();
+                }
             }
         }
         // remove old entries
@@ -713,8 +724,19 @@ function bibtex_js_draw() {
 
         // Executed on completion of last outstanding ajax call
         $.when.apply($, requests).then(function() {
-            (new BibtexDisplay()).displayBibtex(bibstring, $("#bibtex_display"));
+            // Check if we have a bibtex_display id or classes
+            if ($("#bibtex_display").length) {
+                (new BibtexDisplay()).displayBibtex(bibstring, $("#bibtex_display"));
+            } else if ($(".bibtex_display").length) {
+                // Loop through all bibtex_displays on the page
+                $(".bibtex_display").each(function(index) {
+                    // ($this) is the class node output for the bitex entries
+                    (new BibtexDisplay()).displayBibtex(bibstring, $(this));
+                });
+            }
             loadExtras();
+            // Remove elements from html that are not needed to display
+            $(".bibtex_structure").remove();
         });
     }
 }

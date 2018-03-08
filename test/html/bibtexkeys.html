@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>
+      Bibtex-js Demo
+    </title>
+
+    <script src="../../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    <bibtex src="testing.bib"></bibtex>
+
+    <style>
+      bibtex { display: none; }
+      #bibtex_errors { margin-top:10px; color: red;}
+    </style>
+  </head>
+  <body>
+
+
+    <!-- This file is for testing the single bibtex entry display for bibtex_js -->
+
+    <div class="bibtex_structure">
+      <div class="sort year" extra="ASC number">
+          <div class="templates">
+	  </div>
+      </div>
+    </div>
+
+    <div class="bibtex_template">
+      <span class="if year">
+	<span class="year"></span>,
+      </span>
+      <span class="bibtexkey"></span>
+    </div>
+
+    <div id="bibtex_errors"></div>
+    <h1> Rendered Publications</h1>
+
+    <h2> Two Displays </h2>
+    <div id="1">
+      <div class="bibtex_display"
+	   bibtexkeys="sammet2003programming|bauer1998ubersetzung"></div>
+    </div>
+    <h2> One Displays </h2>
+    <div id="2">
+      <div class="bibtex_display" bibtexkeys="parr1995antlr"></div>
+    </div>
+    <h2> Three Displays with same</h2>
+    <div id="3">
+      <div class="bibtex_display"
+	   bibtexkeys="wiki:chomskyh|sammet2003programming|parr1995antlr"></div>
+    </div>
+
+  </body>
+</html>

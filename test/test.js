@@ -127,3 +127,43 @@ test('Check Group ASC String', async t => {
     }
 
 })
+
+fixture `Individual bibtex keys`
+    .page `http://localhost:8000/test/html/bibtexkeys.html`
+
+test('Check individual bibtex keys', async t => {
+    const bibtexdisplay = Selector('.bibtex_display');
+    const bibtexentries = Selector('.bibtexentry');
+
+    // Check the total count of display and entries
+    await t
+        .expect(bibtexdisplay).ok()
+        .expect(bibtexentries).ok()
+        .expect(bibtexdisplay.count).eql(3)
+        .expect(bibtexentries.count).eql(6);
+
+    var counter = 0;
+    var keys = ["sammet2003programming", "bauer1998ubersetzung", "parr1995antlr", "sammet2003programming", "wiki:chomskyh", "parr1995antlr"];
+
+    // Check the number in each bibtex display
+    var array = [2, 1, 3];
+    for (var i = 0; i < 3; ++i) {
+        var display = bibtexdisplay.nth(i).find('.bibtexentry')
+        await t.expect(display.count).eql(array[i]);
+
+        // Check if they are sorted
+        for (var j = 1; j < array[i]; ++j) {
+            const first = display.nth(j).find('.year');
+            const second = display.nth(j - 1).find('.year');
+            await t.expect(await first.innerText).lte(await second.innerText);
+        }
+
+        // Check that each entry has the corrent bibtexkey
+        for (var j = 0; j < array[i]; ++j) {
+            const key = display.nth(j).find('.bibtexkey');
+            await t.expect(await key.innerText).eql(keys[counter]);
+            counter++;
+        }
+    }
+
+})
