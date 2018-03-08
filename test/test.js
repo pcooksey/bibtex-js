@@ -131,7 +131,7 @@ test('Check Group ASC String', async t => {
 fixture `Individual bibtex keys`
     .page `http://localhost:8000/test/html/bibtexkeys.html`
 
-test('Check individual bibtex keys', async t => {
+test('Check Individual BibTeX Keys Test', async t => {
     const bibtexdisplay = Selector('.bibtex_display');
     const bibtexentries = Selector('.bibtexentry');
 
@@ -166,4 +166,36 @@ test('Check individual bibtex keys', async t => {
         }
     }
 
+})
+
+fixture `Academic Style Test`
+    .page `http://localhost:8000/test/html/academicstyle.html`
+
+test('Check academic style', async t => {
+    const divs = Selector('#bibtex_display').child('div');
+    const bibtexentries = Selector('.bibtexentry');
+
+    //console.log(await divs);
+    // Check the total count of display and entries
+    await t
+        .expect(divs).ok()
+        .expect(bibtexentries).ok()
+        .expect(divs.count).eql(3)
+        .expect(bibtexentries.count).eql(5);
+
+    var titles = ['refereed articles', 'books', 'other publications'];
+    var count = [1, 3, 1];
+    var bibtextypekey = ["@ARTICLE", "@BOOK", "@MISC"];
+
+    // Check if the title is correct and it has the correct number of entries
+    for (var i = 0; i < 3; ++i) {
+        const subbibtexentries = divs.nth(i).find('.bibtexentry');
+        await t
+            .expect(divs.nth(i).getAttribute('id')).eql(titles[i])
+            .expect(subbibtexentries.count).eql(count[i]);
+
+        // Test that the entries are of the correct type
+        const stringNode = subbibtexentries.withExactText(bibtextypekey[i]);
+        await t.expect(stringNode.count).eql(count[i]);
+    }
 })
