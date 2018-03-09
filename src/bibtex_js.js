@@ -492,7 +492,7 @@ function BibtexDisplay() {
                     return bValue.toUpperCase().localeCompare(aValue.toUpperCase());
                     break;
                 case "number":
-                    return parseInt(aValue) - parseInt(bValue);
+                    return parseInt(bValue) - parseInt(aValue);
                     break;
                 case "date":
                     return new Date(bValue) - new Date(aValue);

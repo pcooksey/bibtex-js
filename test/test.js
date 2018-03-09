@@ -103,7 +103,7 @@ test('Check Sort ASC String', async t => {
         .expect(entriesCount).eql(5);
 
     for (var i = 1; i < 5; i++) {
-        await t.expect(await entries.nth(i).find('.year').innerText).lte(await entries.nth(i - 1).find('.year').innerText);
+        await t.expect(await entries.nth(i).find('.year').innerText).gte(await entries.nth(i - 1).find('.year').innerText);
     }
 
 })
@@ -123,7 +123,7 @@ test('Check Group ASC String', async t => {
         .expect(groups.count).eql(4);
 
     for (var i = 1; i < 5; i++) {
-        await t.expect(await entries.nth(i).find('.year').innerText).lte(await entries.nth(i - 1).find('.year').innerText);
+        await t.expect(await entries.nth(i).find('.year').innerText).gte(await entries.nth(i - 1).find('.year').innerText);
     }
 
 })
