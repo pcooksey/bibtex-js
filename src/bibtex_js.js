@@ -350,18 +350,27 @@ function BibtexDisplay() {
         return value;
     }
 
-    this.displayAuthor = function(string) {
+    this.displayAuthor = function(string, firstReversed) {
         string = string.replace(/[ ]*[\n\t][ ]*/g, " ");
         string = string.replace(/[ ]+/g, " ");
         var arrayString = string.split(new RegExp("[\\s]+and[\\s]+"));
-        var newString = arrayString[0];
-        for (i = 1; i < arrayString.length; i++) {
-            if (i + 1 >= arrayString.length) {
-                newString += ", and " + arrayString[i];
+        var newString = ''
+        $.each(arrayString, function(index, item) {
+            if (index == 0 && firstReversed) {
+                // First author should be in 'Last, First' style
+                newString += item;
             } else {
-                newString += ", " + arrayString[i];
+                // Other authors should be in 'First Last' style
+                var name = item.split(new RegExp(",\\s"));
+                newString += name[1] + " " + name[0];
             }
-        }
+            // Last author is separated with ', and'
+            if (index == arrayString.length - 2) {
+                newString += ", and ";
+            } else if (index <= arrayString.length - 3) {
+                newString += ", ";
+            }
+        }); 
         return newString;
     }
 
@@ -434,7 +443,9 @@ function BibtexDisplay() {
             }
 
             if (key == "AUTHOR") {
-                value = this.displayAuthor(this.fixValue(value));
+                value = this.displayAuthor(this.fixValue(value), true);
+            } else if (key == "COLLABORATOR") {
+                value = this.displayAuthor(this.fixValue(value), false);
             } else if (key == "PAGES") {
                 value = value.replace("--", "-");
             } else if (key == "DATE") {
