@@ -30,7 +30,7 @@ test('Check Entries', async t => {
         }).innerText).eql('Programming languages')
         .expect(await entry0.find('.author', {
             index: 0
-        }).innerText).eql('Sammet, J.E., and Hemmendinger, D.')
+        }).innerText).eql('Sammet, J.E., and D. Hemmendinger')
         .expect(await entry0.find('.year', {
             index: 0
         }).innerText).eql('2003')
@@ -39,7 +39,7 @@ test('Check Entries', async t => {
         }).innerText).eql('Übersetzung objektorientierter Programmiersprachen: Konzepte, abstrakte Maschinen und Praktikum \\glqq Java Compiler\\grqq')
         .expect(await entry1.find('.author', {
             index: 1
-        }).innerText).eql('Bauer, B., and Höllerer, R.')
+        }).innerText).eql('Bauer, B., and R. Höllerer')
         .expect(await entry1.find('.year', {
             index: 1
         }).innerText).eql('1998')
@@ -48,7 +48,7 @@ test('Check Entries', async t => {
         }).innerText).eql('ANTLR: A predicated-LL (k) parser generator')
         .expect(await entry2.find('.author', {
             index: 2
-        }).innerText).eql('Parr, T.J., and Quong, R.W.')
+        }).innerText).eql('Parr, T.J., and R.W. Quong')
         .expect(await entry2.find('.year', {
             index: 2
         }).innerText).eql('1995')
