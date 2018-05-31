@@ -810,7 +810,7 @@ function BibTeXSearcher() {
     }
 
     this.unhideAll = function() {
-        $("div#bibtex_display").children().each(
+        $("div#bibtex_display, div.bibtex_display").children().each(
             function() {
                 $(this).show();
                 $(this).find(".bibtexentry").each(
@@ -822,7 +822,7 @@ function BibTeXSearcher() {
 
     this.hideEntry = function(word) {
         var funcCaller = this;
-        var container = $("div#bibtex_display").children();
+        var container = $("div#bibtex_display, div.bibtex_display").children();
         if (container.first().hasClass("bibtexentry:visible")) {
             container.each(
                 function() {
