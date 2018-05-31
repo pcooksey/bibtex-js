@@ -32,6 +32,11 @@ Adding the `bibtex_search` class to an input tag allows the user to search anyth
 <input type="text" class="bibtex_search" id="searchbar" placeholder="Search publications">
 ```
 
+You might also want to define a reset button, which clears all the choices and text inputs comfortably. Adding the class `bibtex_reset` will take care of the onClick magic.
+```html
+<button type="button" class="bibtex_reset">Reset</button>
+```
+
 ## Variable access:
 
 The class `bibtexVar` prints a bibtex entry value within the tag's attributes. The `extra` field defines what value(s) to use ex., the key associate with bibtex entry `BIBTEXKEY`. In any of the attributes use `+BIBTEXKEY+` for where it should print the value. In our example, the papers are stored with the bibtex key as the file name so the template system will generate the link to the page for each bibtex entry. 

@@ -912,7 +912,7 @@ function loadExtras() {
     }
 
     //Resets selects when back button is used
-    $("select").each(function() {
+    $("select.bibtex_search").each(function() {
         if (localStorage.getItem($(this).attr("id"))) {
             $(this).val(JSON.parse(localStorage.getItem($(this).attr("id"))));
         }
@@ -930,7 +930,17 @@ function loadExtras() {
             combineSearcher(BibTeXSearcherClass, true);
         }
     });
-
+    
+    $(".bibtex_reset").each(function(i, obj) {
+        $(this).on('click', function(e) {
+            $("select.bibtex_search").each(function () {
+                localStorage.setItem($(this).attr("id"),"");
+                $(this).val("");
+            }); 
+            $("#searchbar").val("");
+            $("#searchbar").trigger('change');
+        });
+    });
 }
 
 function combineSearcher(searcherClass, needToRestart) {
