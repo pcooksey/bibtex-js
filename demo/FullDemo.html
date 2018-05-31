@@ -23,14 +23,6 @@
 		    });
 		  }); 
 		});   
-		function reset() {
-			$("select").each(function () {
-			  localStorage.setItem($(this).attr("id"),"");
-			  $(this).val("");
-			}); 
-			$("#searchbar").val("");
-			$("#searchbar").trigger('change');
-		}
     </script>
     
     <style>
@@ -55,7 +47,7 @@
 <div class="container-fluid">
 	<div class="searchbar">
 		<div style="float:left;">
-			<button type="button" class="btn btn-default" onclick="reset()">Reset</button>
+			<button type="button" class="btn btn-default bibtex_reset">Reset</button>
 		</div>
 		<div style="float:left;">
 			<select id="authorselectfirst" class="btn bibtex_search bibtex_author" style="border: 1px solid lightgrey;" extra="first" search="author">
