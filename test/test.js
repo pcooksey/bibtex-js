@@ -174,13 +174,14 @@ fixture `Academic Style Test`
 test('Check academic style', async t => {
     const divs = Selector('#bibtex_display').child('div');
     const bibtexentries = Selector('.bibtexentry');
+    const sections = Selector('.sections').child('div');
 
     //console.log(await divs);
     // Check the total count of display and entries
     await t
         .expect(divs).ok()
         .expect(bibtexentries).ok()
-        .expect(divs.count).eql(3)
+        .expect(sections.count).eql(3)
         .expect(bibtexentries.count).eql(5);
 
     var titles = ['refereed articles', 'books', 'other publications'];
@@ -189,9 +190,8 @@ test('Check academic style', async t => {
 
     // Check if the title is correct and it has the correct number of entries
     for (var i = 0; i < 3; ++i) {
-        const subbibtexentries = divs.nth(i).find('.bibtexentry');
+        const subbibtexentries = sections.nth(i).find('.bibtexentry');
         await t
-            .expect(divs.nth(i).getAttribute('id')).eql(titles[i])
             .expect(subbibtexentries.count).eql(count[i]);
 
         // Test that the entries are of the correct type

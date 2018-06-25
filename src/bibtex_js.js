@@ -583,12 +583,13 @@ function BibtexDisplay() {
             }
         } else if (sectionsChild.length) {
             var values = [],
-                titles = [];
+                section = [],
+                toRemove = [];
             // Get all the unique values for the sections
             var sectionbibtexkey = sectionsChild.first().attr('class').split(" ")[1].toUpperCase();
             $('.section', '.sections').each(function(i, object) {
                 values.push($(this).attr('class').split(" ")[1].toUpperCase());
-                titles.push($(this).attr('title'));
+                section.push($(this));
             });
 
             //Get the bibtex topics html here.
@@ -596,16 +597,11 @@ function BibtexDisplay() {
 
             // Iterate through the values and recurively call this function
             globalStruct = $('<div></div>');
+            //Starting to create the page
+            var newStruct = struct.clone();
             for (val in values) {
-                //Starting to create the page
-                var newStruct = struct.clone();
                 var sectionNameValue = values[val];
                 var re = new RegExp(sectionNameValue);
-                var sectionNameTitle = titles[val];
-                //Add the header for the group
-                newStruct.children("." + sectionbibtexkey.toLowerCase()).first().prepend("<h" + (level + 1) + " class='" + groupName + "' id=\"" + sectionNameValue + "\">" + sectionNameTitle + "</h" + (level + 1) + ">");
-
-                newStruct.attr("id", sectionNameTitle.toLowerCase());
 
                 //Divide the array into group with sectionNameValue
                 splicedArray = $.grep(entries, function(object, i) {
@@ -615,22 +611,28 @@ function BibtexDisplay() {
                 if (splicedArray.length) {
                     //Add the topic value to the topics structure if it exists on the page
                     if (topics.length && level == 0) {
+                        var sectionNameTitle = section[val].children().first().text();
                         topics.append(" - <a href=\"#" + sectionNameValue + "\"> " + sectionNameTitle + " </a>");
                     }
                     // Get back the struct to add to the page
-                    var tempStruct = this.createStructure(sectionsChild.clone(), output, splicedArray, level + 1);
+                    var tempStruct = this.createStructure(section[val].clone(), output, splicedArray, level + 1);
                     if (groupChild.children(".group").length) {
                         nextGroupName = "." + groupChild.children(".group").attr('class').split(' ').join('.');
                         newStruct.find(nextGroupName).replaceWith(tempStruct.find(nextGroupName));
                     } else {
-                        newStruct.find(".templates").append(tempStruct.find(".templates").html());
+                        newStruct.find(".templates").eq(val).append(tempStruct.find(".templates").html());
                     }
                     if (level == 0) {
                         output.append(newStruct);
                     } else {
                         globalStruct.append(newStruct);
                     }
+                } else {
+                    toRemove.push(val);
                 }
+            }
+            for (val in toRemove) {
+                newStruct.find(".section").eq(toRemove[val]).remove();
             }
             if (level == 0) {
                 return output;
