@@ -544,8 +544,13 @@ function BibtexDisplay() {
                 var newStruct = struct.clone();
                 var groupNameValue = values[val];
                 //Add the header for the group
-                newStruct.children("." + groupName.toLowerCase()).first().prepend("<h" + (level + 1) + " class='" +
-                    groupName + "' id=\"" + groupNameValue + "\">" + this.fixValue(groupNameValue) + "</h" + (level + 1) + ">");
+                var header = newStruct.children("." + groupName.toLowerCase()).first().find(".title");
+                if (header.length) {
+                    header.prepend(this.fixValue(groupNameValue));
+                } else {
+                    newStruct.children("." + groupName.toLowerCase()).first().prepend("<h" + (level + 1) + " class='" +
+                        groupName + "' id=\"" + groupNameValue + "\">" + this.fixValue(groupNameValue) + "</h" + (level + 1) + ">");
+                }
 
                 //Divide the array into group with groupNameValue
                 splicedArray = $.grep(sortedArray, function(object, i) {
