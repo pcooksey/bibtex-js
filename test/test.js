@@ -226,3 +226,42 @@ test('Check class=bibtexVar', async t => {
     }
 
 })
+
+fixture `BibTexAuthors test`
+    .page `http://localhost:8000/test/html/authorformat.html`
+
+test('Check printing authors names', async t => {
+    const entries = Selector('#bibtex_display').find('.bibtexentry');
+    const entriesCount = Selector('#bibtex_display').find('.bibtexentry').count;
+    await t
+        .expect(entries).ok()
+        .expect(entriesCount).eql(18);
+
+    var authors = [" Last, First",
+        " Last, First Name",
+        "von Last, First",
+        " Last, First von",
+        "von Last, First",
+        " Last, First Von",
+        "de Last, First Name",
+        " Last, First Name de",
+        "de Middle de Last, First",
+        " Last Name, First",
+        "von de middle de last",
+        " Last, First",
+        "von Last, First",
+        "Von de Name de Long Last, First",
+        "von Last, Jr., First",
+        " Last, Jr., First von",
+        " Last, First, and von Last, First",
+        " Barnes and Noble, Inc., and  Barnes and Noble, Inc."
+
+    ];
+
+    for (var i = 1; i < authors.length; i++) {
+        const entry = entries.nth(i);
+        await t
+            .expect(await entry.find('.author').textContent).eql(authors[i]);
+    }
+
+})
