@@ -1136,16 +1136,26 @@ var defaultTemplate = "<div class=\"bibtex_template\">" +
     "<span class=\"title\"></span>\n</div></div>";
 
 // check whether or not jquery is present
-if (!window.jQuery) {
-    //Add jquery to the webpage
-    var jq = document.createElement('script');
-    jq.type = 'text/javascript';
-    jq.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js';
-    document.getElementsByTagName('head')[0].appendChild(jq);
-    // Poll for jQuery to come into existance
+if (!window.jQuery || !window.moment) {
+    if (!window.jQuery) {
+        //Add jquery to the webpage
+        var jq = document.createElement('script');
+        jq.type = 'text/javascript';
+        jq.src = 'https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js';
+        document.getElementsByTagName('head')[0].appendChild(jq);
+    }
+    if (!window.moment) {
+        //Add moment to the webpage for dates
+        var mo = document.createElement('script');
+        mo.type = 'text/javascript';
+        mo.src = 'https://rawgit.com/moment/moment/2.22.2/min/moment.min.js';
+        document.getElementsByTagName('head')[0].appendChild(mo);
+    }
+
+    // Poll for jQuery and moment to come into existance
     var checkReady = function(callback) {
-        if (window.jQuery) {
-            callback(jQuery);
+        if (window.jQuery && window.moment) {
+            callback(jQuery && moment);
         } else {
             window.setTimeout(function() {
                 checkReady(callback);
