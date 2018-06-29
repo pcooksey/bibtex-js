@@ -449,10 +449,16 @@ function BibtexDisplay() {
         string = string.replace(/[ ]+/g, " ");
         // Split string by 'and' keeping {words and words} together
         var arrayString = string.split(new RegExp(/\s+and\s+?(?![^\{]*\})/));
+        // Get the max amount of authors to print
+        console.log(format);
+        var searchLength = arrayString.length;
+        if (format.attr("max")) {
+            searchLength = Math.min(format.attr("max"), searchLength);
+        }
         // Check if authors are formatted
         var newString = "";
         if (format.find("span:not(a)").length) {
-            for (i = 0; i < arrayString.length; i++) {
+            for (i = 0; i < searchLength; i++) {
                 // Split string by ',' keeping {words, and words} together
                 var name = this.getName(arrayString[i].split(/\,\s?(?![^\{]*\})/));
                 var author = format.clone();
@@ -477,13 +483,20 @@ function BibtexDisplay() {
             }
         } else {
             newString = arrayString[0];
-            for (i = 1; i < arrayString.length; i++) {
+            for (i = 1; i < searchLength; i++) {
                 if (i + 1 >= arrayString.length) {
                     newString += ", and " + arrayString[i];
                 } else {
                     newString += ", " + arrayString[i];
                 }
             }
+        }
+        // Checking if et al. must be added
+        if (searchLength != arrayString.length) {
+            if (searchLength > 1) {
+                newString += ",";
+            }
+            newString += " et al.";
         }
         return newString;
     }

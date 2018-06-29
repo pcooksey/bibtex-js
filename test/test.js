@@ -312,3 +312,43 @@ test('Search entries check', async t => {
     }
 
 })
+
+fixture `Check Print One Author Test`
+    .page `http://localhost:8000/test/html/max1authors.html`
+
+test('Print 1 author', async t => {
+    const entries = Selector('#bibtex_display').find('.bibtexentry');
+    await t
+        .expect(entries).ok()
+
+    var authors = ["Sammet, J.E.",
+        "Sammet, J.E. et al.",
+        "Sammet, J.E. et al."
+    ];
+
+    for (var i = 0; i < authors.length; i++) {
+        const entry = entries.nth(i);
+        await t
+            .expect(await entry.find('.author').textContent).eql(authors[i]);
+    }
+})
+
+fixture `Check Print Two Authors Test`
+    .page `http://localhost:8000/test/html/max2authors.html`
+
+test('Print 2 authors', async t => {
+    const entries = Selector('#bibtex_display').find('.bibtexentry');
+    await t
+        .expect(entries).ok()
+
+    var authors = ["Sammet, J.E.",
+        "Sammet, J.E., and Hemmendinger, D.",
+        "Sammet, J.E., Hemmendinger, D., et al."
+    ];
+
+    for (var i = 0; i < authors.length; i++) {
+        const entry = entries.nth(i);
+        await t
+            .expect(await entry.find('.author').textContent).eql(authors[i]);
+    }
+})
