@@ -954,7 +954,8 @@ function BibTeXSearcher() {
     this.hideEntry = function(word) {
         var funcCaller = this;
         var container = $("div#bibtex_display, div.bibtex_display").children();
-        if (container.first().hasClass("bibtexentry:visible")) {
+        // No bibtex_structure search
+        if (container.first().hasClass("bibtexentry")) {
             container.each(
                 function() {
                     if (!funcCaller.checkEntry($(this), word)) {
@@ -962,6 +963,7 @@ function BibTeXSearcher() {
                     }
                 });
         } else {
+            // There is a bibtex_structure
             container.each(
                 function() {
                     var shouldHide = true;

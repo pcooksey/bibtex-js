@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>
+      Bibtex-js Demo
+    </title>
+
+    <script src="../../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    <bibtex src="testing.bib"></bibtex>
+
+    <style>
+      bibtex { display: none; }
+      #bibtex_errors { margin-top:10px; color: red;}
+    </style>
+  </head>
+  <body>
+
+    <!-- This file is for testing class="bibtex_display" and searching
+    them of bibtex_js -->
+
+    <div id="bibtex_errors"></div>
+    <h1> Rendered Publications</h1>
+
+    <div>
+      <input type="text" class="bibtex_search form-control" id="searchbar" placeholder="Search publications"></input>
+    </div>
+    <div class="bibtex_topics"> </div>
+
+    <div class="bibtex_display" bibtexkeys="sammet2003programming|bauer1998ubersetzung"></div>
+    <div class="bibtex_display" bibtexkeys="parr1995antlr"></div>
+    <div class="bibtex_display" bibtexkeys="wiki:chomskyh|sammet2003programming|parr1995antlr"></div>
+
+  </body>
+</html>

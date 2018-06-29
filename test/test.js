@@ -265,3 +265,50 @@ test('Check printing authors names', async t => {
     }
 
 })
+
+fixture `Search Entries Test (no bibtex_structure)`
+    .page `http://localhost:8000/test/html/selectingentries.html`
+
+test('Selecting bibtex entries check', async t => {
+    const entries = Selector('.bibtex_display').find('.bibtexentry');
+    const entriesCount = Selector('.bibtex_display').find('.bibtexentry').count;
+    const bibtex_display = Selector(".bibtex_display");
+    const bibtex_display_count = Selector(".bibtex_display").count;
+    await t
+        .expect(entries).ok()
+        .expect(entriesCount).eql(6)
+        .expect(bibtex_display_count).eql(3);
+
+    var counts = [2, 1, 3];
+
+    for (var i = 0; i < counts.length; i++) {
+        const entry = bibtex_display.nth(i);
+        await t
+            .expect(await entry.find(".bibtexentry").count).eql(counts[i]);
+    }
+
+})
+
+test('Search entries check', async t => {
+    const searchbar = Selector('#searchbar');
+    await t
+        .expect(searchbar).ok();
+
+    var searchTerms = ["Sammet", "1", "1998"];
+    var counts = [2, 3, 1];
+
+    for (var i = 0; i < searchTerms.length; i++) {
+        await t.typeText(searchbar, searchTerms[i], {
+            replace: true
+        });
+
+        // Get visible entries
+        const entries = Selector('.bibtex_display').find('.bibtexentry').filter(el => el.style.display !== 'none');;
+        const entriesCount = entries.count;
+
+        await t
+            .expect(entries).ok()
+            .expect(entriesCount).eql(counts[i]);
+    }
+
+})
