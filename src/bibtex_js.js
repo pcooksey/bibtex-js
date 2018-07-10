@@ -450,7 +450,6 @@ function BibtexDisplay() {
         // Split string by 'and' keeping {words and words} together
         var arrayString = string.split(new RegExp(/\s+and\s+?(?![^\{]*\})/));
         // Get the max amount of authors to print
-        console.log(format);
         var searchLength = arrayString.length;
         if (format.attr("max")) {
             searchLength = Math.min(format.attr("max"), searchLength);
