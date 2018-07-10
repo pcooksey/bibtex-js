@@ -769,11 +769,11 @@ function BibtexDisplay() {
                         globalStruct.append(newStruct);
                     }
                 } else {
-                    toRemove.push(val);
+                    toRemove.push(newStruct.find(".section").eq(val));
                 }
             }
             for (val in toRemove) {
-                newStruct.find(".section").eq(toRemove[val]).remove();
+                toRemove[val].remove();
             }
             if (level == 0) {
                 return output;
