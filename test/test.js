@@ -352,3 +352,26 @@ test('Print 2 authors', async t => {
             .expect(await entry.find('.author').textContent).eql(authors[i]);
     }
 })
+
+fixture `Check Author Initials`
+    .page `http://localhost:8000/test/html/firstinitials.html`
+
+test('first_initial', async t => {
+    const entries = Selector('#bibtex_display').find('.first_initial');
+    const entriesCount = Selector('#bibtex_display').find('.first_initial').count;
+    await t
+        .expect(entries).ok()
+        .expect(entriesCount).eql(4); // There are two missing because they don't have first names
+
+    var initials = ["F.",
+        "F. M.",
+        "F. M. S.",
+        "F.",
+    ];
+
+    for (var i = 0; i < initials.length; i++) {
+        const entry = entries.nth(i);
+        await t
+            .expect(await entry.textContent).eql(initials[i]);
+    }
+})

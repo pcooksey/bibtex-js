@@ -1,7 +1,7 @@
 ﻿
 /* 
  * Author = Philip Cooksey
- * Edited = July 2015
+ * Edited = July 2018
  * Website = https://github.com/pcooksey/bibtex-js
  * Credit = Henrik Mühe
  *
@@ -351,8 +351,8 @@ function BibtexDisplay() {
     }
 
     this.getName = function(array) {
-        // First, Junior, Von, Last
-        var name = ["", "", "", ""];
+        // First, Junior, Von, Last, First Initals
+        var name = ["", "", "", "", ""];
         // check how many elements in array 1, 2, or 3
         switch (array.length) {
             case 1:
@@ -394,7 +394,6 @@ function BibtexDisplay() {
                         var space = (name[3] != "") ? " " : "";
                         name[3] += space + this.fixValue(words[index]);
                     }
-                    return name;
                 }
                 break;
             case 2:
@@ -428,13 +427,16 @@ function BibtexDisplay() {
                     }
                     // Get first name
                     name[0] = this.fixValue(array[arrayIndex]);
-                    return name;
                 }
                 break;
             default:
                 console.log("Processed author incorrectly!");
                 return name;
         }
+        if (name[0] != "") {
+            name[4] = name[0].split(" ").map((s) => s.substring(0, 1).toUpperCase()).join(". ") + ".";
+        }
+        return name;
     }
 
 
@@ -442,7 +444,8 @@ function BibtexDisplay() {
         "FIRST": 0,
         "JUNIOR": 1,
         "VON": 2,
-        "LAST": 3
+        "LAST": 3,
+        "FIRST_INITIAL": 4
     });
     this.displayAuthor = function(string, format) {
         string = string.replace(/[ ]*[\n\t][ ]*/g, " ");
@@ -461,7 +464,7 @@ function BibtexDisplay() {
                 // Split string by ',' keeping {words, and words} together
                 var name = this.getName(arrayString[i].split(/\,\s?(?![^\{]*\})/));
                 var author = format.clone();
-                var fullName = $.grep(name, Boolean).join(" ");
+                var fullName = $.grep(name.slice(0, 4), Boolean).join(" ");
                 author.attr('class', fullName);
                 author.find("span:not(a)").each(function() {
                     var index = Format[$(this).attr('class').toUpperCase()];

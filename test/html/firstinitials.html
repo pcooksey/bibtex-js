@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>
+      Bibtex-js Demo
+    </title>
+
+    <script src="../../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    <textarea id="bibtex_input" style="display:none;">
+      @book{1.0,
+      author = "First Last",
+      },
+      @book{1.1,
+      author = "First Middle Last",
+      },
+      @book{1.2,
+      author = "First Middle Second Last",
+      },
+      @book{2.0,
+      author = "First de Middle de Last",
+      },
+      @book{3.0,
+      author = "Last",
+      },
+      @book{3.1,
+      author = "{Long Last Name}",
+      },
+    </textarea>
+
+    <style>
+      bibtex { display: none; }
+      #bibtex_errors { margin-top:10px; color: red;}
+    </style>
+  </head>
+  <body>
+
+    <!-- This file is for testing different author cases of bibtex_js -->
+
+    <div id="bibtex_errors"></div>
+    <h1> Rendered Publications</h1>
+
+    <div class="bibtex_topics"></div>
+
+    <div class="bibtex_template">
+      <div class="if author" style="font-weight: bold;">
+	<span class="author"><span class="first_initial"></span>
+      </div>
+    </div>
+
+    <div id="bibtex_display">
+    </div>
+
+  </body>
+</html>
