@@ -1,7 +1,7 @@
 ﻿
 /* 
  * Author = Philip Cooksey
- * Edited = July 2018
+ * Edited = September 2018
  * Website = https://github.com/pcooksey/bibtex-js
  * Credit = Henrik Mühe
  *
@@ -520,6 +520,10 @@ function BibtexDisplay() {
             keys.push(key.toUpperCase());
         }
 
+        // Regex
+        var orRegExp = new RegExp('\\s*[\\|\\|]\\s*', "gi"); // split by "||"
+        var eqRegExp = new RegExp('\\s*==\\s*', "gi"); // split by "=="
+
         // find all ifs and check them
         var removed = false;
         do {
@@ -532,20 +536,29 @@ function BibtexDisplay() {
             // check if
             var cond = conds.first();
             cond.removeClass("if");
-            var ifTrue = true;
-            var classList = cond.attr('class').split(' ');
+            var keepIf = false;
+            var classList = cond.attr('class').split(orRegExp);
+            var self = this;
             $.each(classList, function(index, cls) {
-                if (cls[0] == "!" &&
-                    keys.indexOf(cls.substring(1, cls.length).toUpperCase()) < 0) {
-                    ifTrue = true;
-                } else if (keys.indexOf(cls.toUpperCase()) < 0) {
-                    ifTrue = false;
+                var equation = cls.split(eqRegExp);
+                if (equation.length == 2) {
+                    if (keys.indexOf(equation[0].toUpperCase()) > 0 &&
+                        self.fixValue(entry[equation[0].toUpperCase()]) == equation[1]) {
+                        keepIf |= true;
+                    }
+                } else {
+                    if (cls[0] == "!" &&
+                        keys.indexOf(cls.substring(1, cls.length).toUpperCase()) < 0) {
+                        keepIf |= true;
+                    } else if (keys.indexOf(cls.toUpperCase()) > 0) {
+                        keepIf |= true;
+                    }
                 }
                 cond.removeClass(cls);
             });
 
             // remove false ifs
-            if (!ifTrue) {
+            if (!keepIf) {
                 cond.remove();
             }
         } while (true);

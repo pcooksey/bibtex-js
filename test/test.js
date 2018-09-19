@@ -375,3 +375,27 @@ test('first_initial', async t => {
             .expect(await entry.textContent).eql(initials[i]);
     }
 })
+
+fixture `Check if entrykey==value`
+    .page `http://localhost:8000/test/html/ifequals.html`
+
+test('ifequals', async t => {
+    const entries = Selector('#bibtex_display').find('.bibtexentry');
+    const entriesCount = Selector('#bibtex_display').find('.bibtexentry').count;
+    await t
+        .expect(entries).ok()
+        .expect(entriesCount).eql(5);
+
+    var values = ["Article",
+        "Book",
+        "Book No Space One Space",
+        "Misc",
+        "Book No Space One Space",
+    ];
+
+    for (var i = 0; i < values.length; i++) {
+        const entry = entries.nth(i);
+        await t
+            .expect(await entry.innerText).eql(values[i]);
+    }
+})
