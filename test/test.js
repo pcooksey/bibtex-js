@@ -103,7 +103,8 @@ test('Check Sort ASC String', async t => {
         .expect(entriesCount).eql(5);
 
     for (var i = 1; i < 5; i++) {
-        await t.expect(await entries.nth(i).find('.year').innerText).gte(await entries.nth(i - 1).find('.year').innerText);
+        await t.expect(Number(await entries.nth(i).find('.year').innerText))
+            .gte(Number(await entries.nth(i - 1).find('.year').innerText));
     }
 
 })
@@ -123,7 +124,8 @@ test('Check Group ASC String', async t => {
         .expect(groups.count).eql(4);
 
     for (var i = 1; i < 5; i++) {
-        await t.expect(await entries.nth(i).find('.year').innerText).gte(await entries.nth(i - 1).find('.year').innerText);
+        await t.expect(Number(await entries.nth(i).find('.year').innerText))
+            .gte(Number(await entries.nth(i - 1).find('.year').innerText));
     }
 
 })
@@ -155,7 +157,7 @@ test('Check Individual BibTeX Keys Test', async t => {
         for (var j = 1; j < array[i]; ++j) {
             const first = display.nth(j).find('.year');
             const second = display.nth(j - 1).find('.year');
-            await t.expect(await first.innerText).lte(await second.innerText);
+            await t.expect(Number(await first.innerText)).lte(Number(await second.innerText));
         }
 
         // Check that each entry has the corrent bibtexkey
