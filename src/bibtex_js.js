@@ -457,6 +457,11 @@ function BibtexDisplay() {
         if (format.attr("max")) {
             searchLength = Math.min(format.attr("max"), searchLength);
         }
+
+        // Get conjunction if set in author
+        conjunction = format.attr('conjunction') ? format.attr('conjunction') : ', and';
+        conjunction = "<span class='bibtex_js_conjunction'>" + conjunction + "</span>";
+
         // Check if authors are formatted
         var newString = "";
         if (format.find("span:not(a)").length) {
@@ -478,7 +483,7 @@ function BibtexDisplay() {
                 if (i == 0) {
                     newString += author[0].outerHTML;
                 } else if (i + 1 >= arrayString.length) {
-                    newString += ", and " + author[0].outerHTML;
+                    newString += conjunction + " " + author[0].outerHTML;
                 } else {
                     newString += ", " + author[0].outerHTML;
                 }
@@ -487,7 +492,7 @@ function BibtexDisplay() {
             newString = arrayString[0];
             for (i = 1; i < searchLength; i++) {
                 if (i + 1 >= arrayString.length) {
-                    newString += ", and " + arrayString[i];
+                    newString += conjunction + " " + arrayString[i];
                 } else {
                     newString += ", " + arrayString[i];
                 }

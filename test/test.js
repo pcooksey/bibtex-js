@@ -399,3 +399,72 @@ test('ifequals', async t => {
             .expect(await entry.innerText).eql(values[i]);
     }
 })
+
+fixture `Check conjunction in author list`
+    .page `http://localhost:8000/test/html/conjunction.html`
+
+test('Conjunction', async t => {
+    const entries = Selector('#bibtex_display').find('.bibtex_js_conjunction');
+    const entriesCount = entries.count;
+    await t
+        .expect(entries).ok()
+        .expect(entriesCount).eql(3);
+
+    for (var i = 0; i < 3; i++) {
+        const entry = entries.nth(i);
+        await t
+            .expect(await entry.innerText).eql(' e');
+    }
+
+})
+
+test('Custom Author Conjunction', async t => {
+    await t
+        .navigateTo('http://localhost:8000/test/html/conjunction_custom_author_list.html');
+    const entries = Selector('#bibtex_display').find('.bibtex_js_conjunction');
+    const entriesCount = entries.count;
+    await t
+        .expect(entries).ok()
+        .expect(entriesCount).eql(3);
+
+    for (var i = 0; i < 3; i++) {
+        const entry = entries.nth(i);
+        await t
+            .expect(await entry.innerText).eql(' e');
+    }
+
+})
+
+test('Conjunction Empty', async t => {
+    await t
+        .navigateTo('http://localhost:8000/test/html/conjunction_empty.html');
+    const entries = Selector('#bibtex_display').find('.bibtex_js_conjunction');
+    const entriesCount = entries.count;
+    await t
+        .expect(entries).ok()
+        .expect(entriesCount).eql(3);
+
+    for (var i = 0; i < 3; i++) {
+        const entry = entries.nth(i);
+        await t
+            .expect(await entry.innerText).eql(', and');
+    }
+
+})
+
+test('Conjunction Missing', async t => {
+    await t
+        .navigateTo('http://localhost:8000/test/html/conjunction_missing.html');
+    const entries = Selector('#bibtex_display').find('.bibtex_js_conjunction');
+    const entriesCount = entries.count;
+    await t
+        .expect(entries).ok()
+        .expect(entriesCount).eql(3);
+
+    for (var i = 0; i < 3; i++) {
+        const entry = entries.nth(i);
+        await t
+            .expect(await entry.innerText).eql(', and');
+    }
+
+})
