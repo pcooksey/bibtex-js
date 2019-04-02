@@ -277,7 +277,7 @@ function BibtexParser() {
             end = this.pos + 1;
             if (this.tryMatch("}")) {
                 this.match("}");
-            } else {
+            } else if (this.tryMatch(")")) {
                 this.match(")");
             }
             if (this.tryMatch(",")) {
