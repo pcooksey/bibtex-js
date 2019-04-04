@@ -348,6 +348,7 @@ function BibtexDisplay() {
             }
         }
         value = value.replace(/[\{|\}]/g, '');
+        value = value.replace(/\$(.*?)\$/, '$1'); // remove $..$ used for math env.
         return value;
     }
 
