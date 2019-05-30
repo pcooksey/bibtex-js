@@ -217,7 +217,7 @@ function BibtexParser() {
     this.entry_body = function(directive) {
         this.currentEntry = this.key();
         this.entries[this.currentEntry] = new Object();
-        this.entries[this.currentEntry]["BIBTEXKEY"] = this.rawCurrentKey;
+        this.entries[this.currentEntry]["BIBTEXKEY"] = this.rawCurrentKey.replace(/[:/.# ]/g,'__');
         if (directive == "@INCOLLECTION") {
             this.entries[this.currentEntry]["BIBTEXTYPE"] = "book chapter";
         } else if (directive == "@INPROCEEDINGS") {
