@@ -288,6 +288,20 @@ function BibtexParser() {
             this.entries[this.currentEntry]["BIBTEXRAW"] = this.input.substring(start, end);
         }
     }
+
+    // If there is no explicit URL we fallback to DOI
+    // If force equal true, it replaces all URLs by DOI URLs if DOI is availble,
+    // if not, DOI will be used only if URL isn't present.
+    this.enableDOI = function(force) {
+      for (var key in this.entries) {
+        var entry = this.entries[key];
+        if ('DOI' in entry) {
+          if (!('URL' in entry) || force == true) {
+            entry['URL'] = 'https://doi.org/'+entry['DOI'];
+          }
+        }
+      }
+    }
 }
 
 function BibtexDisplay() {
@@ -832,6 +846,7 @@ function BibtexDisplay() {
         var b = new BibtexParser();
         b.setInput(input);
         b.bibtex();
+        b.enableDOI(false);
         var entries = b.getEntries();
 
         // save old entries to remove them later
