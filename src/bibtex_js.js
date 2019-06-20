@@ -1,4 +1,3 @@
-﻿
 /* 
  * Author = Philip Cooksey
  * Edited = September 2018
@@ -355,83 +354,81 @@ function BibtexDisplay() {
         var name = ["", "", "", "", ""];
         // check how many elements in array 1, 2, or 3
         switch (array.length) {
-            case 1:
-                {
-                    // Split by spaces keeping {names names} together
-                    var words = array[0].split(/\ \s?(?![^\{]*\})/);
-                    // Get first name
-                    var index = 0;
-                    for (; index < words.length - 1; index++) {
-                        var space = (index > 0) ? " " : "";
-                        if (words[index][0] == '{') {
-                            if (words[index][1] == '\\') {
-                                words[index] = this.fixValue(words[index]);
-                                // Test below
-                            } else {
-                                name[0] += space + this.fixValue(words[index]);
-                                continue;
-                            }
-                        }
-                        if (words[index][0] == words[index][0].toUpperCase()) {
-                            name[0] += space + this.fixValue(words[index]);
+            case 1: {
+                // Split by spaces keeping {names names} together
+                var words = array[0].split(/\ \s?(?![^\{]*\})/);
+                // Get first name
+                var index = 0;
+                for (; index < words.length - 1; index++) {
+                    var space = (index > 0) ? " " : "";
+                    if (words[index][0] == '{') {
+                        if (words[index][1] == '\\') {
+                            words[index] = this.fixValue(words[index]);
+                            // Test below
                         } else {
-                            break; //von part
+                            name[0] += space + this.fixValue(words[index]);
+                            continue;
                         }
                     }
-                    // Get von part forward look for last non uppercase
-                    var lastVon = index;
-                    for (var temp = index; temp < words.length - 1; temp++) {
-                        if (words[temp][0] == words[temp][0].toLowerCase()) {
-                            lastVon = temp;
-                        }
-                    }
-                    for (; index <= lastVon && index < words.length - 1; index++) {
-                        var space = (name[2] != "") ? " " : "";
-                        name[2] += space + this.fixValue(words[index]);
-                    }
-                    // Get last name
-                    for (; index < words.length; index++) {
-                        var space = (name[3] != "") ? " " : "";
-                        name[3] += space + this.fixValue(words[index]);
+                    if (words[index][0] == words[index][0].toUpperCase()) {
+                        name[0] += space + this.fixValue(words[index]);
+                    } else {
+                        break; //von part
                     }
                 }
-                break;
-            case 2:
-            case 3:
-                {
-                    var arrayIndex = 0;
-                    // Split by spaces keeping {names names} together
-                    var words = array[arrayIndex].split(/\ \s?(?![^\{]*\})/);
-                    var index = 0;
-                    // Get von part forward look for last non uppercase
-                    var lastVon = -1;
-                    for (var temp = index; temp < words.length - 1; temp++) {
-                        if (words[temp][0] == words[temp][0].toLowerCase()) {
-                            lastVon = temp;
-                        }
+                // Get von part forward look for last non uppercase
+                var lastVon = index;
+                for (var temp = index; temp < words.length - 1; temp++) {
+                    if (words[temp][0] == words[temp][0].toLowerCase()) {
+                        lastVon = temp;
                     }
-                    for (; index <= lastVon && index < words.length - 1; index++) {
-                        var space = (name[2] != "") ? " " : "";
-                        name[2] += space + this.fixValue(words[index]);
-                    }
-                    // Get last name
-                    for (; index < words.length; index++) {
-                        var space = (name[3] != "") ? " " : "";
-                        name[3] += space + this.fixValue(words[index]);
-                    }
-                    arrayIndex++;
-                    // Check if there is a Jr. part
-                    if (array.length == 3) {
-                        name[1] = this.fixValue(array[arrayIndex]);
-                        arrayIndex++;
-                    }
-                    // Get first name
-                    name[0] = this.fixValue(array[arrayIndex]);
                 }
-                break;
-            default:
-                console.log("Processed author incorrectly!");
-                return name;
+                for (; index <= lastVon && index < words.length - 1; index++) {
+                    var space = (name[2] != "") ? " " : "";
+                    name[2] += space + this.fixValue(words[index]);
+                }
+                // Get last name
+                for (; index < words.length; index++) {
+                    var space = (name[3] != "") ? " " : "";
+                    name[3] += space + this.fixValue(words[index]);
+                }
+            }
+            break;
+        case 2:
+        case 3: {
+            var arrayIndex = 0;
+            // Split by spaces keeping {names names} together
+            var words = array[arrayIndex].split(/\ \s?(?![^\{]*\})/);
+            var index = 0;
+            // Get von part forward look for last non uppercase
+            var lastVon = -1;
+            for (var temp = index; temp < words.length - 1; temp++) {
+                if (words[temp][0] == words[temp][0].toLowerCase()) {
+                    lastVon = temp;
+                }
+            }
+            for (; index <= lastVon && index < words.length - 1; index++) {
+                var space = (name[2] != "") ? " " : "";
+                name[2] += space + this.fixValue(words[index]);
+            }
+            // Get last name
+            for (; index < words.length; index++) {
+                var space = (name[3] != "") ? " " : "";
+                name[3] += space + this.fixValue(words[index]);
+            }
+            arrayIndex++;
+            // Check if there is a Jr. part
+            if (array.length == 3) {
+                name[1] = this.fixValue(array[arrayIndex]);
+                arrayIndex++;
+            }
+            // Get first name
+            name[0] = this.fixValue(array[arrayIndex]);
+        }
+        break;
+        default:
+            console.log("Processed author incorrectly!");
+            return name;
         }
         if (name[0] != "") {
             name[4] = name[0].split(" ").map((s) => s.substring(0, 1).toUpperCase()).join(". ") + ".";
