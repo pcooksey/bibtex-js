@@ -1,0 +1,65 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>
+      Bibtex-js Test
+    </title>
+
+    <script src="../../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    <textarea id="bibtex_input" style="display:none;">
+      @book{book1,
+         author = "Tim Smith and Bob Last",
+         title = "1"
+      },
+      @book{book2,
+         author = "Noboby Who and Tim Smith",
+         title = "2"
+      },
+      @book{book3,
+         author = "Tim Smith",
+         title = "3"
+      },
+      @book{book4,
+         author = "Bob Last",
+         title = "4"
+      },
+      @book{book5,
+         author = "Smith, Tim and Bob Last",
+         title = "5"
+      },
+      @book{book6,
+         author = "Smith, T.",
+         title = "6"
+      }
+      @book{book7,
+         author = "Steven Smith",
+         title = "7"
+      }
+    </textarea>
+
+    <style>
+      bibtex { display: none; }
+      #bibtex_errors { margin-top:10px; color: red;}
+    </style>
+  </head>
+  <body>
+
+    <!-- This file is for testing class="bibtex_display" and using
+    author selector -->
+
+    <div id="bibtex_errors"></div>
+    <h1>author="Tim Smith" </h1>
+    <div class="bibtex_display" author="Tim Smith"></div>
+    <h1>author="^(Tim Smith)"</h1>
+    <div class="bibtex_display" author="^(Tim Smith)"></div>
+    <h1>author="Bob Last"</h1>
+    <div class="bibtex_display" author="Bob Last"></div>
+    <h1>author="Tim Smith|Bob Last"</h1>
+    <div class="bibtex_display" author="Tim Smith|Bob Last"></div>
+    <h1>author="Tim Smith|Smith, T.|Smith, Tim"</h1>
+    <div class="bibtex_display" author="Tim Smith|Smith, T.|Smith, Tim"></div>
+  </body>
+</html>

@@ -470,3 +470,38 @@ test('Conjunction Missing', async t => {
     }
 
 })
+
+fixture `Selecting Bibtex Entries By Author`
+    .page `http://localhost:8000/test/html/selectingbyauthor.html`
+
+test('Select By Author Test', async t => {
+    const bibtexdisplay = Selector('.bibtex_display');
+    const bibtexentries = Selector('.bibtexentry');
+
+    // Check the total count of display and entries
+    await t
+        .expect(bibtexdisplay).ok()
+        .expect(bibtexentries).ok()
+        .expect(bibtexdisplay.count).eql(5);
+
+    var counter = 0;
+    var test = [
+        [1, 2, 3],
+        [1, 3],
+        [1, 4, 5],
+        [1, 2, 3, 4, 5],
+        [1, 2, 3, 5, 6]
+    ];
+
+    // Check the number in each bibtex display
+    for (var i = 0; i < 5; ++i) {
+        var display = bibtexdisplay.nth(i).find('.bibtexentry')
+
+        // Check that each entry has the correct number
+        for (var j = 0; j < test[i].length; ++j) {
+            const key = display.nth(j).find('.title');
+            await t.expect(Number(await key.innerText)).eql(test[i][j]);
+        }
+    }
+
+})

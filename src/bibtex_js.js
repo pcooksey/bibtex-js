@@ -507,10 +507,15 @@ function BibtexDisplay() {
 
     this.createTemplate = function(entry, output) {
         // Check if bibtex keys are limiting output (bibtexkeys="key1|key2|...|keyN")
-        if (output[0].hasAttribute("bibtexkeys")) {
-            var bitexkeys = output[0].getAttribute("bibtexkeys");
-            if (!entry["BIBTEXKEY"].match(bitexkeys))
-                return null;
+        if (output[0].attributes.length > 1) {
+            for (var i = 0, attrs = output[0].attributes, n = attrs.length; i < n; ++i) {
+                var name = attrs[i].nodeName.toUpperCase();
+                var value = attrs[i].nodeValue;
+                if (name in entry) {
+                    if (!entry[name].match(value))
+                        return null;
+                }
+            }
         }
 
         // find template
