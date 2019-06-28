@@ -459,40 +459,35 @@ function BibtexDisplay() {
         conjunction = format.attr('conjunction') ? format.attr('conjunction') : ', and';
         conjunction = "<span class='bibtex_js_conjunction'>" + conjunction + "</span>";
 
-        // Check if authors are formatted
         var newString = "";
-        if (format.find("span:not(a)").length) {
-            for (i = 0; i < searchLength; i++) {
-                // Split string by ',' keeping {words, and words} together
-                var name = this.getName(arrayString[i].split(/\,\s?(?![^\{]*\})/));
-                var author = format.clone();
-                var fullName = $.grep(name.slice(0, 4), Boolean).join(" ");
-                author.attr('class', fullName);
-                author.find("span:not(a)").each(function() {
-                    var index = Format[$(this).attr('class').toUpperCase()];
-                    // Check if value is empty
-                    if (name[index] != "") {
-                        $(this).html($(this).html() + name[index]);
+        for (i = 0; i < searchLength; i++) {
+            // Split string by ',' keeping {words, and words} together
+            var name = this.getName(arrayString[i].split(/\,\s?(?![^\{]*\})/));
+            var author = format.clone();
+            var fullName = $.grep(name.slice(0, 4), Boolean).join(" ");
+            author.attr('class', fullName);
+            var textBefore = false;
+            for (j = 0, ele = author.find("span:not(a)"), len = ele.length; j < len; ++j) {
+                var index = Format[ele[j].getAttribute("class").toUpperCase()];
+                // Check if value is empty
+                if (name[index] != "") {
+                    if (ele[j].hasAttribute("bibtex-js-rif") && !textBefore) {
+                        ele[j].textContent = name[index];
                     } else {
-                        $(this).remove();
+                        ele[j].textContent = ele[j].textContent + name[index];
                     }
-                });
-                if (i == 0) {
-                    newString += author[0].outerHTML;
-                } else if (i + 1 >= arrayString.length) {
-                    newString += conjunction + " " + author[0].outerHTML;
+                    textBefore = true;
                 } else {
-                    newString += ", " + author[0].outerHTML;
+                    ele[j].remove();
                 }
+
             }
-        } else {
-            newString = arrayString[0];
-            for (i = 1; i < searchLength; i++) {
-                if (i + 1 >= arrayString.length) {
-                    newString += conjunction + " " + arrayString[i];
-                } else {
-                    newString += ", " + arrayString[i];
-                }
+            if (i == 0) {
+                newString += author[0].outerHTML;
+            } else if (i + 1 >= arrayString.length) {
+                newString += conjunction + " " + author[0].outerHTML;
+            } else {
+                newString += ", " + author[0].outerHTML;
             }
         }
         // Checking if et al. must be added
@@ -597,7 +592,8 @@ function BibtexDisplay() {
 
             if (key == "AUTHOR") {
                 var format = tpl.find("span:not(a)." + key.toLowerCase());
-                value = this.displayAuthor(value, format);
+                if (format.length)
+                    value = this.displayAuthor(value, format);
             } else if (key == "PAGES") {
                 value = value.replace("--", "-");
             } else if (key == "DATE") {
@@ -919,7 +915,16 @@ function bibtex_js_draw() {
             .fail((request, status, error) => console.error(error))
         requests.push(request);
     });
-
+    // Add default author format if it doesn't exist
+    var authorFormat = $(".bibtex_template").find("span:not(a).author");
+    if (authorFormat.length && !authorFormat.find("span:not(a)").length) {
+        authorFormat.append($("<span></span>").attr("class", "first"));
+        authorFormat.append($("<span></span>").attr("class", "von")
+            .attr("bibtex-js-rif", "").text(" "));
+        authorFormat.append($("<span></span>").attr("class", "last")
+            .attr("bibtex-js-rif", "").text(" "));
+        authorFormat.append($("<span></span>").attr("class", "junior").text(", "));
+    }
     // Executed on completion of last outstanding ajax call
     $.when.apply($, requests).then(function() {
         // Check if we have a bibtex_display id or classes
