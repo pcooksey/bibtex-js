@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>
+      Bibtex-js Demo
+    </title>
+
+    <script src="../../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    <textarea id="bibtex_input" style="display:none;">
+      @book{book1,
+      author = "John Smith",
+      title = "The First Book",
+      year = "2000",
+      },
+      @book{book2,
+      author = "John Smith",
+      title = "The Second Book",
+      year = "2001",
+      },
+      @article{article1,
+      author = "Last, Bob Jr.",
+      title = "Another Title",
+      year = "2011",
+      },
+      @article{article2,
+      author = "M. Night",
+      title = "Okay",
+      },
+      @inproceedings{proceedings1,
+      author = "Steven Man and Tim Bloke",
+      title = "The best",
+      year = "1990",
+      }
+    </textarea>
+
+    <!--
+    1) Two of the same names
+    2) Missing year during generation
+    3) Author names are different ordering
+    4) Multiple authors
+    -->
+
+    <style>
+      bibtex { display: none; }
+      #bibtex_errors { margin-top:10px; color: red;}
+    </style>
+  </head>
+  <body>
+
+    <!-- This file is for testing the auto-generation that fills html
+    selects for searching with bibtex_js -->
+
+    <div id="bibtex_errors"></div>
+    <h1> Auto-Fill Selects Test File</h1>
+
+    <select class="bibtex_search bibtex_generate_author" search="author">
+      <option value="">Search Author</option>
+    </select>
+
+    <select class="bibtex_search bibtex_generate_author" extra="first" search="author">
+      <option value="">Search First Author</option>
+    </select>
+
+    <select class="bibtex_search bibtex_generate_year" search="year">
+      <option value="">Search Year</option>
+    </select>
+
+    <select class="bibtex_search bibtex_generate_bibtexkey" search="bibtexkey">
+      <option value="">Search BibTeX Key</option>
+    </select>
+
+    <select class="bibtex_search bibtex_generate_bibtextypekey" search="bibtextypekey">
+      <option value="">Search BibTeX Type</option>
+    </select>
+
+    <div id="bibtex_display">
+    </div>
+
+    <div class="bibtex_template">
+      <div class="if author" style="font-weight: bold;">
+	<span class="if year">
+	  <span class="year"></span>,
+	</span>
+	<span class="author"></span>
+      </div>
+      <div style="margin-left: 10px; margin-bottom:5px;">
+	<span class="title"></span>
+	<span class="bibtexkey" style="display:none"></span>
+	<span class="bibtextypekey" style="display:none"></span>
+      </div>
+    </div>
+
+  </body>
+</html>

@@ -951,9 +951,9 @@ function bibtex_js_draw() {
                 }
             });
         }
-        loadExtras();
         // Remove elements from html that are not needed to display
         $(".bibtex_structure").remove();
+        loadExtras();
     });
 }
 
@@ -1119,8 +1119,15 @@ function createWebPage(defaultTemplate) {
 
 function loadExtras() {
     BibTeXSearcherClass = new BibTeXSearcher();
-    $(".bibtex_author").each(function(i, obj) {
-        authorList($(this));
+    // Generate all search lists
+    $("select").each(function() {
+        for (var i = 0, l = this.classList.length; i < l; ++i) {
+            var checkRegEx = this.classList[i].match(/bibtex_generate_(.*)/);
+            if (checkRegEx) {
+                var field = checkRegEx[1];
+                generateList($(this), field);
+            }
+        }
     });
 
     localStorage.removeItem("customerDatabase");
@@ -1144,7 +1151,7 @@ function loadExtras() {
         $(this).keyup(function() {
             combineSearcher(BibTeXSearcherClass);
         });
-        if ($(this).val() != "") {
+        if (obj.length > 0 && $(this).val() != "") {
             combineSearcher(BibTeXSearcherClass, true);
         }
     });
@@ -1177,37 +1184,64 @@ function combineSearcher(searcherClass, needToRestart) {
     searcherClass.searcher(string, needToRestart);
 }
 
-function authorList(object) {
+function generateList(object, bibtexField) {
     var map = new Object();
-    $("span.author").each(function(i, obj) {
-        arrayString = $(this).text().split(new RegExp(",[\\s]+and[\\s]+|,[\\s]+"));
-        if (object.attr("extra") == "first") {
-            map[arrayString[0]] = 1;
-        } else {
-            for (i = 0; i < arrayString.length; i++) {
-                if (arrayString[i] in map) {
-                    map[arrayString[i]] += 1;
+    var displayTuples = [];
+    if (bibtexField == "author") {
+        $(".bibtexentry span.author").each(function(i, obj) {
+            authors = $(this).children("span:not(.bibtex_js_conjunction)");
+            authorLength = authors.length;
+            if (object.attr("extra") == "first") {
+                authorLength = 1;
+            }
+            for (i = 0; i < authorLength; i++) {
+                if (authors[i] in map) {
+                    map[authors[i].innerText][0] += 1;
                 } else {
-                    map[arrayString[i]] = 1;
+                    var strName = "";
+                    if (authors[i].childNodes.length > 1) {
+                        var nameSplit = authors[i].innerText.split(" ");
+                        var lastName = nameSplit.pop();
+                        strName = lastName + ", " + nameSplit.join(" ");
+                    } else {
+                        strName = authors[i].innerText;
+                    }
+                    map[authors[i].innerText] = [1, strName];
                 }
             }
+        });
+        for (var key in map) {
+            var nameSplit = key.split(" ");
+            var lastName = nameSplit.pop();
+            displayTuples.push([lastName.toLowerCase(), //Last name
+                key, // Full name
+                map[key][1], //Print
+                map[key][0]
+            ]); //Count
         }
-    });
+    } else {
+        $(".bibtexentry span." + bibtexField).each(function(i, obj) {
+            arrayString = $(this).text();
+            if (arrayString in map) {
+                map[arrayString] += 1;
+            } else {
+                map[arrayString] = 1;
+            }
+        });
+        for (var key in map) {
+            displayTuples.push([key, key, key, map[key]]);
+        }
+    }
 
-    var tuples = [];
-    for (var key in map) tuples.push([key, key.split(" ").pop().toLowerCase()]);
-
-    tuples.sort(function(a, b) {
-        a = a[1];
-        b = b[1];
+    displayTuples.sort(function(a, b) {
+        a = a[0];
+        b = b[0];
         return a < b ? -1 : (a > b ? 1 : 0);
     });
 
-    for (var i = 0; i < tuples.length; i++) {
-        var key = tuples[i][0];
-        var value = tuples[i][1];
-        var array = key.split(" ");
-        var text = array.pop() + ", " + array.join(" ");
+    for (var i = 0; i < displayTuples.length; i++) {
+        var key = displayTuples[i][1];
+        var text = displayTuples[i][2];
         object.append($("<option></option>").attr("value", key).text(text));
     }
 }
