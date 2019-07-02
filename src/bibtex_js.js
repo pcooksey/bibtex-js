@@ -226,7 +226,7 @@ function BibtexParser() {
         } else if (directive == "@TECHREPORT") {
             this.entries[this.currentEntry]["BIBTEXTYPE"] = "technical report";
         }
-        this.entries[this.currentEntry]["BIBTEXTYPEKEY"] = directive;
+        this.entries[this.currentEntry]["BIBTEXTYPEKEY"] = directive.substr(1);
         this.match(",");
         this.key_value_list();
     }

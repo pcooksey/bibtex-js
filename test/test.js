@@ -246,7 +246,7 @@ test('Check academic style', async t => {
 
     var titles = ['refereed articles', 'books', 'other publications'];
     var count = [1, 3, 1];
-    var bibtextypekey = ["@ARTICLE", "@BOOK", "@MISC"];
+    var bibtextypekey = ["ARTICLE", "BOOK", "MISC"];
 
     // Check if the title is correct and it has the correct number of entries
     for (var i = 0; i < 3; ++i) {
