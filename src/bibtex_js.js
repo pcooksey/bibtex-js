@@ -862,7 +862,12 @@ function BibtexDisplay() {
         // parse bibtex input
         var b = new BibtexParser();
         b.setInput(input);
-        b.bibtex();
+        try {
+            b.bibtex();
+        } catch (e) {
+            b.errorThrown(e);
+            console.error(e);
+        }
         var entries = b.getEntries();
 
         // save old entries to remove them later
