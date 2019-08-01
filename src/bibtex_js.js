@@ -706,6 +706,7 @@ function BibtexDisplay() {
                 var header = newStruct.children("." + groupName.toLowerCase()).first().find(".title");
                 if (header.length) {
                     header.prepend(this.fixValue(groupNameValue));
+                    header.attr("id", this.fixValue(groupNameValue));
                 } else {
                     newStruct.children("." + groupName.toLowerCase()).first().prepend("<h" + (level + 1) + " class='" +
                         groupName + "' id=\"" + groupNameValue + "\">" + this.fixValue(groupNameValue) + "</h" + (level + 1) + ">");

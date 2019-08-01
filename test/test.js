@@ -130,6 +130,24 @@ test('Check Group ASC String', async t => {
 
 })
 
+fixture `Group Custom Header`
+    .page `http://localhost:8000/test/html/groupCustomHeader.html`;
+
+test('Check custom titles', async t => {
+    const titles = Selector('h2');
+    await t
+        .expect(titles.count).eql(4);
+
+    var years = [1995, 1998, 2003, 2007];
+
+    for (var i = 0; i < 4; i++) {
+        await t
+            .expect(Number(await titles.nth(i).innerText)).eql(Number(years[i]))
+            .expect(Number(await titles.nth(i).getAttribute("id"))).eql(Number(years[i]));
+    }
+
+})
+
 fixture `Individual bibtex keys`
     .page `http://localhost:8000/test/html/bibtexkeys.html`
 
