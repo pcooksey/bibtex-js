@@ -523,3 +523,46 @@ test('Select By Author Test', async t => {
     }
 
 })
+
+fixture `Callback functions simple case`
+    .page `http://localhost:8000/test/html/callback.html`
+
+test('Test callbacks', async t => {
+    const bibtexentries = Selector('.bibtexentry');
+
+    // Check the total count of display and entries
+    await t
+        .expect(bibtexentries).ok()
+        .expect(bibtexentries.count).eql(5);
+
+    // Check the number in each bibtex display
+    for (var i = 0; i < 5; ++i) {
+        var entry = bibtexentries.nth(i);
+        await t.expect(await entry.innerText).eql(i + "bibtex_display");
+    }
+
+})
+
+fixture `Callback functions with multiple bibtex_display and structure`
+    .page `http://localhost:8000/test/html/callback2.html`
+
+test('Test multiple bibtex_display callbacks', async t => {
+    const bibtexentries = Selector('.bibtexentry');
+
+    // Check the total count of display and entries
+    await t
+        .expect(bibtexentries).ok()
+        .expect(bibtexentries.count).eql(10);
+
+    // Check the number in each bibtex display
+    var i = 0;
+    for (; i < 5; ++i) {
+        var entry = bibtexentries.nth(i);
+        await t.expect(await entry.innerText).eql(i + "bibtex_display1");
+    }
+    for (; i < 10; ++i) {
+        var entry = bibtexentries.nth(i);
+        await t.expect(await entry.innerText).eql(i + "bibtex_display2");
+    }
+
+})

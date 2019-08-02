@@ -828,6 +828,10 @@ function BibtexDisplay() {
                     if (tpl) {
                         structure.find(".templates").append(tpl);
                         tpl.show();
+                        if (tpl.attr("callback")) {
+                            var callback = new Function('bibtexentry', tpl.attr("callback"));
+                            callback(tpl[0]);
+                        }
                     }
                 }
             }
@@ -861,6 +865,10 @@ function BibtexDisplay() {
                 if (tpl) {
                     output.append(tpl);
                     tpl.show();
+                    if (tpl.attr("callback")) {
+                        var callback = new Function('bibtexentry', tpl.attr("callback"));
+                        callback(tpl[0]);
+                    }
                 }
             }
         }
@@ -893,12 +901,21 @@ function bibtex_js_draw() {
     $.when.apply($, requests).then(function() {
         // Check if we have a bibtex_display id or classes
         if ($("#bibtex_display").length) {
-            (new BibtexDisplay()).displayBibtex(bibstring, $("#bibtex_display"));
+            var bibtex_display = $("#bibtex_display");
+            (new BibtexDisplay()).displayBibtex(bibstring, bibtex_display);
+            if (bibtex_display.attr("callback")) {
+                var callback = new Function('bibtex_display', bibtex_display.attr("callback"));
+                callback(bibtex_display[0]);
+            }
         } else if ($(".bibtex_display").length) {
             // Loop through all bibtex_displays on the page
             $(".bibtex_display").each(function(index) {
                 // ($this) is the class node output for the bitex entries
                 (new BibtexDisplay()).displayBibtex(bibstring, $(this));
+                if ($(this).attr("callback")) {
+                    var callback = new Function('bibtex_display', $(this).attr("callback"));
+                    callback($(this)[0]);
+                }
             });
         }
         loadExtras();

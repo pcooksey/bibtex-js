@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>
+      Bibtex-js Callback Test
+    </title>
+
+    <script src="../../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    <bibtex src="testing.bib"></bibtex>
+
+    <style>
+      bibtex { display: none; }
+      #bibtex_errors { margin-top:10px; color: red;}
+    </style>
+  </head>
+  <body>
+
+    <!-- This file is for testing the callbacks in bibtex_js -->
+
+    <div id="bibtex_errors"></div>
+    <h1>Bibtex-js Callback Test</h1>
+
+    <div class="bibtex_structure">
+	<div class="group year" extra="ASC number">
+	    <div class="templates"></div>
+	</div>
+    </div>
+    </div>
+
+    <div class="bibtex_template" callback="count(bibtexentry)">
+    </div>
+
+    <h1>First bibtex_display</h1>
+    <div class="bibtex_display" callback="hideAll(bibtex_display, 'bibtex_display1')">
+    </div>
+    <h1>Second bibtex_display</h1>
+    <div class="bibtex_display" callback="hideAll(bibtex_display, 'bibtex_display2')">
+    </div>
+
+    <script type="text/javascript">
+     function hideAll(bibtex_display, text){
+         var bibtexEntries = bibtex_display.querySelectorAll(".bibtexentry");
+	 for (var i = 0; i < bibtexEntries.length; ++i) {
+	     var node = document.createTextNode(text);
+	     bibtexEntries[i].appendChild(node);
+	 }
+     }
+     var counter = 0;
+     function count(bibtexentry){
+	 var node = document.createTextNode(counter++);
+	 bibtexentry.appendChild(node);
+     }
+    </script>
+
+  </body>
+</html>
