@@ -247,6 +247,21 @@ test('Check class=bibtexVar', async t => {
 
 })
 
+fixture `BibTexVar bibtexjs-css-escape test`
+    .page `http://localhost:8000/test/html/bibtexvar_css_escape.html`
+
+test('Check bibtexjs-css-escape', async t => {
+    const entries = Selector('#bibtex_display').find('.bibtexentry');
+    await t
+        .expect(entries).ok();
+
+    const entry = entries.nth(0);
+    await t
+        .expect(await entry.find('.bibtexVar').withAttribute('bibtexkey').getAttribute('bibtexkey')).eql("a1\\:2\\:3_4\\.\\+-\\*\\/\\'\\?")
+        .expect(await entry.find('.bibtexVar').withAttribute('test').getAttribute('test')).eql("\\!\\ \\#\\$\\%\\&\\'\\(\\)\\*\\+\\,\\.\\/\\:\\;\\<\\=\\>\\?\\@\\[\\\\\\]\\^\\`\\{\\|\\}\\~");
+
+})
+
 fixture `BibTexAuthors test`
     .page `http://localhost:8000/test/html/authorformat.html`
 

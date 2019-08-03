@@ -573,9 +573,13 @@ function BibtexDisplay() {
         tpl.find('.bibtexVar').each(function() {
             var key = $(this).attr("extra").toUpperCase();
             var regEx = new RegExp('\\+' + key + '\\+', "gi");
+            var entryValue = entry[key];
+            if ($(this)[0].hasAttribute("bibtexjs-css-escape")) {
+                entryValue = entryValue.replace(/[\!\#\$\%\&\'\(\)\*\+\,\.\/\:\;\<\=\>\?\@\[\\\]\^\`\{\|\}\~ ]/g, '\\$&');
+            }
             $.each(this.attributes, function(i, attrib) {
                 var value = attrib.value;
-                value = value.replace(regEx, entry[key]);
+                value = value.replace(regEx, entryValue);
                 attrib.value = value;
             });
         });
