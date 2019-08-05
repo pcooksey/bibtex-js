@@ -636,6 +636,24 @@ function BibtexDisplay() {
             // Need to check if values exist
             aValue = (keyUpper in a) ? a[keyUpper] : "";
             bValue = (keyUpper in b) ? b[keyUpper] : "";
+            // `year` and `date` fall back to each other.
+            if (keyUpper == "DATE") {
+                var getDateFromYearMonth = x => {
+                    return (("MONTH" in x) ? x["MONTH"] : "")
+                        + " " + (("YEAR" in x) ? x["YEAR"] : "");
+                };
+                if (!aValue) aValue = getDateFromYearMonth(a);
+                if (!bValue) bValue = getDateFromYearMonth(b);
+            } else if (keyUpper == "YEAR") {
+                var getYearFromDate = x => {
+                    if ("DATE" in x) {
+                        return moment(x["DATE"]).format("YYYY");
+                    }
+                    return "";
+                }
+                if (!aValue) aValue = getYearFromDate(a);
+                if (!bValue) bValue = getYearFromDate(b);
+            }
             switch (rule.toUpperCase()) {
                 case "DESC":
                     //Values remain the same
