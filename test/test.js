@@ -110,6 +110,46 @@ test('Check Sort ASC String', async t => {
 })
 
 
+test
+    .page `http://localhost:8000/test/html/sort_missing_date.html`
+('Check Sort missing date', async t => {
+    const entries = Selector('#bibtex_display').find('.bibtexentry');
+    const entriesCount = Selector('#bibtex_display').find('.bibtexentry').count;
+    await t
+        .expect(entries).ok()
+        .expect(entriesCount).eql(5);
+
+    var authors = ['E', 'C', 'A', 'B', 'D'];
+
+    for (var i = 0; i < 5; i++) {
+        await t.expect(await entries.nth(i).find('.author').textContent)
+            .eql(authors[i]);
+    }
+})
+
+
+test
+    .page `http://localhost:8000/test/html/sort_missing_year.html`
+('Check Sort missing year', async t => {
+    const entries = Selector('#bibtex_display').find('.bibtexentry');
+    const entriesCount = Selector('#bibtex_display').find('.bibtexentry').count;
+    await t
+        .expect(entries).ok()
+        .expect(entriesCount).eql(5);
+
+    var grp0 = ['C', 'E'];  // 2001
+    var grp1 = ['A', 'B'];  // 2003
+    var grp2 = ['D'];  // 2005
+
+    var grps = [grp0, grp0, grp1, grp1, grp2];
+
+    for (var i = 0; i < 5; i++) {
+        await t.expect(grps[i])
+            .contains(await entries.nth(i).find('.author').textContent);
+    }
+})
+
+
 
 fixture `Group Test`
     .page `http://localhost:8000/test/html/group.html`;
