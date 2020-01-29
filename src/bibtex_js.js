@@ -1206,7 +1206,7 @@ if (!window.jQuery || !window.moment) {
         //Add moment to the webpage for dates
         var mo = document.createElement('script');
         mo.type = 'text/javascript';
-        mo.src = 'https://rawgit.com/moment/moment/2.22.2/min/moment.min.js';
+        mo.src = 'https://cdn.jsdelivr.net/gh/moment/moment@2.22.2/min/moment.min.js';
         document.getElementsByTagName('head')[0].appendChild(mo);
     }
 
