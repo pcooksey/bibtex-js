@@ -635,9 +635,9 @@ function BibtexDisplay() {
             // `year` and `date` fall back to each other.
             if (keyUpper == "DATE") {
                 var getDateFromYearMonth = x => {
-                    return ((("MONTH" in x) ? x["MONTH"] : "Jan")
-                        + " 1, "
-                        + (("YEAR" in x) ? x["YEAR"] : "1900"));
+                    return ((("MONTH" in x) ? x["MONTH"] : "Jan") +
+                        " 1, " +
+                        (("YEAR" in x) ? x["YEAR"] : "1900"));
                 };
                 if (!aValue) aValue = getDateFromYearMonth(a);
                 if (!bValue) bValue = getDateFromYearMonth(b);
