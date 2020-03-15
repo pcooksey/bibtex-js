@@ -623,33 +623,60 @@ test('Test multiple bibtex_display callbacks', async t => {
 })
 
 fixture `Auto-Generate Selects`
+
+test
     .page `http://localhost:8000/test/html/autogenerateselects.html`
+    ('Auto-Generated Select Contain Correct Information', async t => {
+        const bibtexsearch = Selector('.bibtex_search');
 
-test('Auto-Generated Select Contain Correct Information', async t => {
-    const bibtexsearch = Selector('.bibtex_search');
+        // Check the total count of display and entries
+        await t
+            .expect(bibtexsearch).ok()
+            .expect(bibtexsearch.count).eql(5);
 
-    // Check the total count of display and entries
-    await t
-        .expect(bibtexsearch).ok()
-        .expect(bibtexsearch.count).eql(5);
+        // Authors, first authors, year, bibtexkey, bibtextypekey
+        var lengths = [6, 5, 5, 6, 4];
+        var values = [
+            ["", "Tim Bloke", "Bob Last, Jr.", "Steven Man", "M. Night", "John Smith"],
+            ["", "Bob Last, Jr.", "Steven Man", "M. Night", "John Smith"],
+            ["", "1990", "2000", "2001", "2011"],
+            ["", "article1", "article2", "book1", "book2", "proceedings1"],
+            ["", "ARTICLE", "BOOK", "INPROCEEDINGS"],
+        ];
 
-    // Authors, first authors, year, bibtexkey, bibtextypekey
-    var lengths = [6, 5, 5, 6, 4];
-    var values = [
-        ["", "Tim Bloke", "Bob Jr. Last", "Steven Man", "M. Night", "John Smith"],
-        ["", "Bob Jr. Last", "Steven Man", "M. Night", "John Smith"],
-        ["", "1990", "2000", "2001", "2011"],
-        ["", "article1", "article2", "book1", "book2", "proceedings1"],
-        ["", "ARTICLE", "BOOK", "INPROCEEDINGS"],
-    ];
-
-    // Loop over each select that was auto generated
-    for (var i = 0; i < 5; ++i) {
-        var options = bibtexsearch.nth(i).find('option');
-        await t.expect(options.count).eql(lengths[i]);
-        for (var j = 0; j < lengths[i]; ++j) {
-            var value = options.nth(j).value;
-            await t.expect(value).eql(values[i][j]);
+        // Loop over each select that was auto generated
+        for (var i = 0; i < 5; ++i) {
+            var options = bibtexsearch.nth(i).find('option');
+            await t.expect(options.count).eql(lengths[i]);
+            for (var j = 0; j < lengths[i]; ++j) {
+                var value = options.nth(j).value;
+                await t.expect(value).eql(values[i][j]);
+            }
         }
-    }
-})
+    })
+
+test
+    .page `http://localhost:8000/test/html/autogenerateselects_lastfirstinitial.html`
+    ('Auto-Generated Author Select Last, First Initial', async t => {
+        const bibtexsearch = Selector('.bibtex_search');
+
+        // Check the total count of display and entries
+        await t
+            .expect(bibtexsearch).ok()
+            .expect(bibtexsearch.count).eql(1);
+
+        // Authors shown, author value
+        var values = [
+            ["Search Author", "Bloke, Tim", "Last, Bob Jr.", "Man, Steven", "Night, M.", "Smith, John"],
+            ["", "Bloke, T.", "Last, B.", "Man, S.", "Night, M.", "Smith, J."],
+        ];
+
+        var options = bibtexsearch.nth(0).find('option');
+        await t.expect(options.count).eql(6);
+        for (var j = 0; j < 6; ++j) {
+            var option = options.nth(j);
+            await t
+                .expect(option.innerText).eql(values[0][j])
+                .expect(option.value).eql(values[1][j]);
+        }
+    })

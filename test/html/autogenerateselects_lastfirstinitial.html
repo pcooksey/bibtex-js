@@ -60,22 +60,6 @@
       <option value="">Search Author</option>
     </select>
 
-    <select class="bibtex_search bibtex_generate_author" extra="first" search="author">
-      <option value="">Search First Author</option>
-    </select>
-
-    <select class="bibtex_search bibtex_generate_year" search="year">
-      <option value="">Search Year</option>
-    </select>
-
-    <select class="bibtex_search bibtex_generate_bibtexkey" search="bibtexkey">
-      <option value="">Search BibTeX Key</option>
-    </select>
-
-    <select class="bibtex_search bibtex_generate_bibtextypekey" search="bibtextypekey">
-      <option value="">Search BibTeX Type</option>
-    </select>
-
     <div id="bibtex_display">
     </div>
 
@@ -84,7 +68,7 @@
 	<span class="if year">
 	  <span class="year"></span>,
 	</span>
-	<span class="author"></span>
+	<span class="author"><span class="last"></span><span class="first_initial">, </span></span>
       </div>
       <div style="margin-left: 10px; margin-bottom:5px;">
 	<span class="title"></span>

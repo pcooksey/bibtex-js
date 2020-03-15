@@ -1195,24 +1195,23 @@ function generateList(object, bibtexField) {
                 authorLength = 1;
             }
             for (i = 0; i < authorLength; i++) {
-                if (authors[i] in map) {
+                if (authors[i].innerText in map) {
                     map[authors[i].innerText][0] += 1;
                 } else {
                     var strName = "";
-                    if (authors[i].childNodes.length > 1) {
-                        var nameSplit = authors[i].innerText.split(" ");
-                        var lastName = nameSplit.pop();
+                    var nameSplit = authors[i].className.split(" ");
+                    var lastName = nameSplit.pop();
+                    if (nameSplit.length >= 1) {
                         strName = lastName + ", " + nameSplit.join(" ");
                     } else {
-                        strName = authors[i].innerText;
+                        strName = lastName;
                     }
-                    map[authors[i].innerText] = [1, strName];
+                    map[authors[i].innerText] = [1, strName, lastName];
                 }
             }
         });
         for (var key in map) {
-            var nameSplit = key.split(" ");
-            var lastName = nameSplit.pop();
+            var lastName = map[key][2];
             displayTuples.push([lastName.toLowerCase(), //Last name
                 key, // Full name
                 map[key][1], //Print
