@@ -1232,11 +1232,20 @@ function generateList(object, bibtexField) {
         }
     }
 
-    displayTuples.sort(function(a, b) {
-        a = a[0];
-        b = b[0];
-        return a < b ? -1 : (a > b ? 1 : 0);
-    });
+    var options = {};
+    var optionStr = object.attr("bibtex_sort_options");
+    if (optionStr !== undefined) {
+        var properties = optionStr.split(",").map(item => item.trim());
+        properties.forEach(function(property) {
+            var tup = property.split(':');
+            options[tup[0]] = tup[1];
+        });
+    }
+
+    displayTuples.sort((a, b) =>
+        a[0].localeCompare(b[0],
+            object.attr("bibtex_sort_language"),
+            options));
 
     for (var i = 0; i < displayTuples.length; i++) {
         var key = displayTuples[i][1];

@@ -680,3 +680,32 @@ test
                 .expect(option.value).eql(values[1][j]);
         }
     })
+
+test
+    .page `http://localhost:8000/test/html/autogenerateselects_sort.html`
+    ('Auto-Generated Sort', async t => {
+        const bibtexsearch = Selector('.bibtex_search');
+
+        // Check the total count of display and entries
+        await t
+            .expect(bibtexsearch).ok()
+            .expect(bibtexsearch.count).eql(3);
+
+        // Authors (default), authors (sv), titles
+        var lengths = [10, 10, 8];
+        var values = [
+            ["", "Tim Bloke", "Name Čat", "Bob Last, Jr.", "Steven Man", "M. Night", "Name Öula", "Name Šat", "John Smith", "Name Zack"],
+            ["", "Tim Bloke", "Name Čat", "Bob Last, Jr.", "Steven Man", "M. Night", "Name Šat", "John Smith", "Name Zack", "Name Öula"],
+            ["", "0", "1", "2", "5", "6", "10", "12"],
+        ];
+
+        // Loop over each select that was auto generated
+        for (var i = 0; i < lengths.length; ++i) {
+            var options = bibtexsearch.nth(i).find('option');
+            await t.expect(options.count).eql(lengths[i]);
+            for (var j = 0; j < lengths[i]; ++j) {
+                var value = options.nth(j).value;
+                await t.expect(value).eql(values[i][j]);
+            }
+        }
+    })
