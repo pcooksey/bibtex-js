@@ -1,0 +1,49 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8" />
+    <meta http-equiv="cache-control" content="no-cache" />
+    <title>
+      Bibtex-js Test
+    </title>
+
+    <script src="../../src/bibtex_js.js" type="text/javascript" charset="utf-8"></script>
+    <textarea id="bibtex_input" style="display:none;">
+      @book{book1,
+      author = "Name Last",
+      },
+      @book{book2,
+      author = "John Smith",
+      },
+      @article{article1,
+      author = "Bob Newman and Name Last",
+      },
+    </textarea>
+  </head>
+  <body>
+
+    <!-- This file is for testing clicking on authors for sorting -->
+    <h1> Test for Sorting Authors by Clicking Their Name</h1>
+
+    <div class="bibtex_template">
+      <div class="if author" style="font-weight:bold;text-decoration:underline;color:blue;">
+	<span class="author"><a class="clickauthors" onclick="(new BibTeXSearcher()).searcher(this.innerText || this.textContent, true)"><span class="first"></span><span class="last"> </span></a></span>
+      </div>
+    </div>
+
+    <script>
+      function displayAll(bibtex){
+          var bibtexEntries = document.querySelectorAll(".bibtexentry");
+          for (var i = 0; i < bibtexEntries.length; ++i) {
+	      bibtexEntries[i].style.display = "block";
+	  }
+      }
+    </script>
+    <button id="showAll" onclick="displayAll()">See All</button>
+
+    <div id="bibtex_display">
+    </div>
+
+  </body>
+</html>

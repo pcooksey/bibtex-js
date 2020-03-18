@@ -388,6 +388,37 @@ test('Search entries check', async t => {
 
 })
 
+test
+    .page `http://localhost:8000/test/html/author_click_sort.html`
+    ('Select by clicking author', async t => {
+        const authors = Selector('.clickauthors');
+        await t
+            .expect(authors).ok()
+            .expect(authors.count).eql(5);
+
+        var authorNames = ["Name Last", "John Smith", "Bob Newman", "Name Last"];
+        var counts = [2, 1, 1, 2];
+
+        for (var i = 0; i < 4; i++) {
+            // Skip the first one because its just the template that remains
+            await t.click(authors.nth(i + 1));
+
+            // Get visible entries
+            const entries = Selector('#bibtex_display').find('.bibtexentry').filter(el => el.style.display !== 'none');
+            const entriesCount = entries.count;
+
+            await t
+                .expect(entries).ok()
+                .expect(entriesCount).eql(counts[i]);
+
+            for (var j = 0; j < counts[i]; ++j) {
+                await t.expect(entries.nth(j).textContent).contains(authorNames[i]);
+            }
+
+            await t.click('#showAll');
+        }
+    })
+
 fixture `Check Print One Author Test`
     .page `http://localhost:8000/test/html/max1authors.html`
 
