@@ -1220,11 +1220,16 @@ function generateList(object, bibtexField) {
         }
     } else {
         $(".bibtexentry span." + bibtexField).each(function(i, obj) {
-            arrayString = $(this).text();
-            if (arrayString in map) {
-                map[arrayString] += 1;
-            } else {
-                map[arrayString] = 1;
+            arrayString = [$(this).text()];
+            if (object[0].hasAttribute("bibtex_split_by")) {
+                arrayString = arrayString[0].split(object.attr("bibtex_split_by"));
+            }
+            for (i = 0; i < arrayString.length; ++i) {
+                if (arrayString[i] in map) {
+                    map[arrayString[i]] += 1;
+                } else {
+                    map[arrayString[i]] = 1;
+                }
             }
         });
         for (var key in map) {

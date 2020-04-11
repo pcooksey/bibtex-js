@@ -14,25 +14,30 @@
       author = "John Smith",
       title = "The First Book",
       year = "2000",
+      keywords = "Computer, Algorithm"
       },
       @book{book2,
       author = "John Smith",
       title = "The Second Book",
       year = "2001",
+      keywords = "Religion"
       },
       @article{article1,
       author = "Last, Jr., Bob",
       title = "Another Title",
       year = "2011",
+      keywords = "Algorithm, Supercomputer"
       },
       @article{article2,
       author = "M. Night",
       title = "Okay",
+      keywords = "Politics, Computer, Democracy"
       },
       @inproceedings{proceedings1,
       author = "Steven Man and Tim Bloke",
       title = "The best",
       year = "1990",
+      keywords = "Religion, Computer, Algorithm, Chess, Society"
       }
     </textarea>
 
@@ -76,6 +81,11 @@
       <option value="">Search BibTeX Type</option>
     </select>
 
+    <select class="bibtex_search bibtex_generate_keywords"
+            search="keywords" bibtex_split_by=", ">
+      <option value="">Search Keyword</option>
+    </select>
+
     <div id="bibtex_display">
     </div>
 
@@ -90,6 +100,7 @@
 	<span class="title"></span>
 	<span class="bibtexkey" style="display:none"></span>
 	<span class="bibtextypekey" style="display:none"></span>
+        <span class="keywords" style="display:none"></span>
       </div>
     </div>
 
