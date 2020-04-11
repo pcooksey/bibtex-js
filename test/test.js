@@ -660,23 +660,24 @@ test
     ('Auto-Generated Select Contain Correct Information', async t => {
         const bibtexsearch = Selector('.bibtex_search');
 
-        // Check the total count of display and entries
-        await t
-            .expect(bibtexsearch).ok()
-            .expect(bibtexsearch.count).eql(5);
-
         // Authors, first authors, year, bibtexkey, bibtextypekey
-        var lengths = [6, 5, 5, 6, 4];
+        var lengths = [6, 5, 5, 6, 4, 9];
         var values = [
             ["", "Tim Bloke", "Bob Last, Jr.", "Steven Man", "M. Night", "John Smith"],
             ["", "Bob Last, Jr.", "Steven Man", "M. Night", "John Smith"],
             ["", "1990", "2000", "2001", "2011"],
             ["", "article1", "article2", "book1", "book2", "proceedings1"],
             ["", "ARTICLE", "BOOK", "INPROCEEDINGS"],
+            ["", "Algorithm", "Chess", "Computer", "Democracy", "Politics", "Religion", "Society", "Supercomputer"],
         ];
 
+        // Check the total count of display and entries
+        await t
+            .expect(bibtexsearch).ok()
+            .expect(bibtexsearch.count).eql(lengths.length);
+
         // Loop over each select that was auto generated
-        for (var i = 0; i < 5; ++i) {
+        for (var i = 0; i < lengths.length; ++i) {
             var options = bibtexsearch.nth(i).find('option');
             await t.expect(options.count).eql(lengths[i]);
             for (var j = 0; j < lengths[i]; ++j) {
