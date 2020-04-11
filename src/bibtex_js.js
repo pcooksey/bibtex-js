@@ -1218,6 +1218,22 @@ function generateList(object, bibtexField) {
                 map[key][0]
             ]); //Count
         }
+    } 
+    if (bibtexField == "keywords") {
+        $(".bibtexentry span.keywords").each(function(i, obj) {
+            keyword = $(this).text().split(", ");
+            keywordLength = keyword.length;
+            for (i = 0; i < keywordLength; i++) {
+                if (keyword[i] in map) {
+                    map[keyword[i]] += 1;
+                } else {
+                    map[keyword[i]] = 1;
+                }
+            }
+        });
+        for (var key in map) {
+            displayTuples.push([key, key, key, map[key]]);
+        }
     } else {
         $(".bibtexentry span." + bibtexField).each(function(i, obj) {
             arrayString = $(this).text();
