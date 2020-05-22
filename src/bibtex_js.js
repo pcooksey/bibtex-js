@@ -276,7 +276,7 @@ function BibtexParser() {
             end = this.pos + 1;
             if (this.tryMatch("}")) {
                 this.match("}");
-            } else {
+            } else if (this.tryMatch(")")) {
                 this.match(")");
             }
             if (this.tryMatch(",")) {
@@ -311,7 +311,8 @@ function BibtexDisplay() {
     this.regExps.push(new RegExp("\\\\\\W*\{\\w+\}")); // 2 \[]{\[]}
     this.regExps.push(new RegExp("\\\\\\W*\\w+\\s")); // 3 \[]
     this.regExps.push(new RegExp("\\\\\\W*\\w+")); // 4 \[]
-    this.regExps.push(new RegExp("\\\\(?![:\\\\\])\\W{1}")); // 5
+    this.regExps.push(new RegExp("\\\\\\w\{\\w\}")); // 5 \\\w{\w} to match e.g. \v{r}
+    this.regExps.push(new RegExp("\\\\(?![:\\\\\])\\W{1}")); // 6
 
     this.fixValue = function(value) {
         do {
@@ -346,6 +347,7 @@ function BibtexDisplay() {
             }
         }
         value = value.replace(/[\{|\}]/g, '');
+        value = value.replace(/\$(.*?)\$/, '$1'); // remove $..$ used for math env.
         return value;
     }
 
