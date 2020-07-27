@@ -456,7 +456,12 @@ function BibtexDisplay() {
         }
 
         // Get conjunction if set in author
-        conjunction = format.attr('conjunction') ? format.attr('conjunction') : ', and';
+        if (searchLength==2) {
+            conjunction = format.attr('conjunction') ? format.attr('conjunction') : ' and';
+        }
+        else {
+        	   conjunction = format.attr('conjunction') ? format.attr('conjunction') : ', and';
+        }
         conjunction = "<span class='bibtex_js_conjunction'>" + conjunction + "</span>";
 
         var newString = "";
